@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="OpenWOVReportDataSet" targetNamespace="http://tempuri.org/OpenWOVReportDataSet.xsd" xmlns:mstns="http://tempuri.org/OpenWOVReportDataSet.xsd" xmlns="http://tempuri.org/OpenWOVReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="OpenWOVReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="OpenWOVReportDataSet" msprop:Generator_UserDSName="OpenWOVReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="openwov" msprop:Generator_TableClassName="openwovDataTable" msprop:Generator_TableVarName="tableopenwov" msprop:Generator_TablePropName="openwov" msprop:Generator_RowDeletingName="openwovRowDeleting" msprop:Generator_RowChangingName="openwovRowChanging" msprop:Generator_RowEvHandlerName="openwovRowChangeEventHandler" msprop:Generator_RowDeletedName="openwovRowDeleted" msprop:Generator_UserTableName="openwov" msprop:Generator_RowChangedName="openwovRowChanged" msprop:Generator_RowEvArgName="openwovRowChangeEvent" msprop:Generator_RowClassName="openwovRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DateAssigned" msprop:Generator_ColumnVarNameInTable="columnDateAssigned" msprop:Generator_ColumnPropNameInRow="DateAssigned" msprop:Generator_ColumnPropNameInTable="DateAssignedColumn" msprop:Generator_UserColumnName="DateAssigned" type="xs:dateTime" />
+              <xs:element name="ProjectID" msprop:Generator_ColumnVarNameInTable="columnProjectID" msprop:Generator_ColumnPropNameInRow="ProjectID" msprop:Generator_ColumnPropNameInTable="ProjectIDColumn" msprop:Generator_UserColumnName="ProjectID" type="xs:string" />
+              <xs:element name="ProjectName" msprop:Generator_ColumnVarNameInTable="columnProjectName" msprop:Generator_ColumnPropNameInRow="ProjectName" msprop:Generator_ColumnPropNameInTable="ProjectNameColumn" msprop:Generator_UserColumnName="ProjectName" type="xs:string" />
+              <xs:element name="AssignedSurveyor" msprop:Generator_ColumnVarNameInTable="columnAssignedSurveyor" msprop:Generator_ColumnPropNameInRow="AssignedSurveyor" msprop:Generator_ColumnPropNameInTable="AssignedSurveyorColumn" msprop:Generator_UserColumnName="AssignedSurveyor" type="xs:string" minOccurs="0" />
+              <xs:element name="AssignedOffice" msprop:Generator_ColumnVarNameInTable="columnAssignedOffice" msprop:Generator_ColumnPropNameInRow="AssignedOffice" msprop:Generator_ColumnPropNameInTable="AssignedOfficeColumn" msprop:Generator_UserColumnName="AssignedOffice" type="xs:string" />
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" />
+              <xs:element name="TimeOpened" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnTimeOpened" msprop:Generator_ColumnPropNameInRow="TimeOpened" msprop:Generator_ColumnPropNameInTable="TimeOpenedColumn" msprop:Generator_UserColumnName="TimeOpened" type="xs:decimal" />
+              <xs:element name="SurveyorNotes" msprop:Generator_ColumnVarNameInTable="columnSurveyorNotes" msprop:Generator_ColumnPropNameInRow="SurveyorNotes" msprop:Generator_ColumnPropNameInTable="SurveyorNotesColumn" msprop:Generator_UserColumnName="SurveyorNotes" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PermitReportDataSet" targetNamespace="http://tempuri.org/PermitReportDataSet.xsd" xmlns:mstns="http://tempuri.org/PermitReportDataSet.xsd" xmlns="http://tempuri.org/PermitReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="PermitReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="PermitReportDataSet" msprop:Generator_UserDSName="PermitReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="permitreport" msprop:Generator_TableClassName="permitreportDataTable" msprop:Generator_TableVarName="tablepermitreport" msprop:Generator_TablePropName="permitreport" msprop:Generator_RowDeletingName="permitreportRowDeleting" msprop:Generator_RowChangingName="permitreportRowChanging" msprop:Generator_RowEvHandlerName="permitreportRowChangeEventHandler" msprop:Generator_RowDeletedName="permitreportRowDeleted" msprop:Generator_UserTableName="permitreport" msprop:Generator_RowChangedName="permitreportRowChanged" msprop:Generator_RowEvArgName="permitreportRowChangeEvent" msprop:Generator_RowClassName="permitreportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TransactionID" msprop:Generator_ColumnVarNameInTable="columnTransactionID" msprop:Generator_ColumnPropNameInRow="TransactionID" msprop:Generator_ColumnPropNameInTable="TransactionIDColumn" msprop:Generator_UserColumnName="TransactionID" type="xs:int" />
+              <xs:element name="ProjectID" msprop:Generator_ColumnVarNameInTable="columnProjectID" msprop:Generator_ColumnPropNameInRow="ProjectID" msprop:Generator_ColumnPropNameInTable="ProjectIDColumn" msprop:Generator_UserColumnName="ProjectID" type="xs:string" />
+              <xs:element name="ProjectName" msprop:Generator_ColumnVarNameInTable="columnProjectName" msprop:Generator_ColumnPropNameInRow="ProjectName" msprop:Generator_ColumnPropNameInTable="ProjectNameColumn" msprop:Generator_UserColumnName="ProjectName" type="xs:string" />
+              <xs:element name="DateReceived" msprop:Generator_ColumnVarNameInTable="columnDateReceived" msprop:Generator_ColumnPropNameInRow="DateReceived" msprop:Generator_ColumnPropNameInTable="DateReceivedColumn" msprop:Generator_UserColumnName="DateReceived" type="xs:dateTime" />
+              <xs:element name="TimeOpened" msprop:Generator_ColumnVarNameInTable="columnTimeOpened" msprop:Generator_ColumnPropNameInRow="TimeOpened" msprop:Generator_ColumnPropNameInTable="TimeOpenedColumn" msprop:Generator_UserColumnName="TimeOpened" type="xs:decimal" />
+              <xs:element name="PermitStatus" msprop:Generator_ColumnVarNameInTable="columnPermitStatus" msprop:Generator_ColumnPropNameInRow="PermitStatus" msprop:Generator_ColumnPropNameInTable="PermitStatusColumn" msprop:Generator_UserColumnName="PermitStatus" type="xs:string" />
+              <xs:element name="Employee" msprop:Generator_ColumnVarNameInTable="columnEmployee" msprop:Generator_ColumnPropNameInRow="Employee" msprop:Generator_ColumnPropNameInTable="EmployeeColumn" msprop:Generator_UserColumnName="Employee" type="xs:string" />
+              <xs:element name="PermitNotes" msprop:Generator_ColumnVarNameInTable="columnPermitNotes" msprop:Generator_ColumnPropNameInRow="PermitNotes" msprop:Generator_ColumnPropNameInTable="PermitNotesColumn" msprop:Generator_UserColumnName="PermitNotes" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:permitreport" />
+      <xs:field xpath="mstns:TransactionID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,103 @@
+﻿<Window x:Class="BlueJayDesign.OpenDesignProjects"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen"
+        xmlns:local="clr-namespace:BlueJayDesign"
+        mc:Ignorable="d"
+        Title="Blue Jay Communications Design Application" Height="800" Width="1000" Closing="Window_Closing" IsVisibleChanged="Window_IsVisibleChanged" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#358AB1" />
+            <Setter Property="Foreground" Value="#FFC9E0DC" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="./#Segoe UI" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Path x:Name="PathIcon" Width="0" Height="0" Stretch="Fill" Fill="#4C87B3" HorizontalAlignment="Left" Margin="17,0,0,0" Data="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF635B5B" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="PathIcon" Property="Fill" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter Property="Background" Value="#FF635B5B" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="PathIcon" Property="Fill" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF981E2A" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="1,1" StartPoint="0.5,0">
+                <GradientStop Color="AliceBlue" Offset="0"/>
+                <GradientStop Color="LightBlue" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid Height="75" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="731*"/>
+                <ColumnDefinition Width="261*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnHome" Content="Home" HorizontalAlignment="Left" Margin="157,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnHome_Click"/>
+            <Button x:Name="btnAssignTask" Content="Assign Task" HorizontalAlignment="Left" Margin="284,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnAssignTask_Click"/>
+            <Button x:Name="btnMyTasks" Content="My Tasks" HorizontalAlignment="Left" Margin="411,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnMyTasks_Click"/>
+            <Button x:Name="btnEmail" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="538,10,0,0" Height="55" Click="BtnEmail_Click"/>
+            <Button x:Name="btnHelp" Content="Help" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="665,10,0,0" Height="55" Click="BtnHelp_Click" Grid.ColumnSpan="2"/>
+            <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="61.173,10,0,0" Height="55" Click="BtnClose_Click" Grid.Column="1"/>
+            <Image HorizontalAlignment="Left" Height="75" VerticalAlignment="Top" Width="149" Stretch="Fill" Source="logo.png"/>
+        </Grid>
+        <StackPanel x:Name="spaSideMenu" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="150" Height="675" Margin="0,84,0,10">
+            <Label x:Name="lblDataEntry" Content="Design Information" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="150" FontSize="16" />
+            <Button x:Name="btnAddNewProject" Content="Add New Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnAddNewProject_Click" />
+            <Button x:Name="btnAssignSurveyor" Content="Assign Surveyor" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnAssignSurveyor_Click" />
+            <Button x:Name="btnUpdateSurvey" Content="Update Survey" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnUpdateSurvey_Click" />
+            <Button x:Name="btnUpdateProject" Content="Update Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnUpdateProject_Click" />
+            <Button x:Name="btnCloseProject" Content="Close Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnCloseProject_Click" />
+            <Button x:Name="btnViewProjectInfo" Content="View Project Info" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnViewProjectInfo_Click" />
+            <Button x:Name="btnEmployeeProductivity" Content="Employee Productivity" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnEmployeeProductivity_Click" />
+            <Label x:Name="lblProjectReports" Content="Design Reports" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="150" FontSize="16" />
+            <Button x:Name="btnOpenDesignProjects" Content="Open Design Projects" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnOpenDesignProjects_Click"/>
+            <Button x:Name="btnDesignProjectReport" Content="Design Project Report" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnDesignProjectReport_Click"/>
+            <Button x:Name="btnPolePermitReport" Content="Pole Permit Report" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnPolePermitReport_Click"/>
+            <Button x:Name="btnOpenSurveryorReport" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnOpenSurveryorReport_Click" >
+                <TextBlock TextWrapping="Wrap" Text="Open  Surveyor  Report" TextAlignment="Center"/>
+            </Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,120,8,599">
+            <Label x:Name="lblTitle" Content="Open Design Projects Report" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" FontSize="22" Width="832" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416" Margin="151,175,425,534">
+            <Button x:Name="btnExportToExcel" Content="Export To Excel" VerticalAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="55" Width="150" FontSize="20" Margin="1,3,1,1" Click="BtnExportToExcel_Click"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416" Margin="571,175,5,534">
+            <Button x:Name="btnPrint" Content="Print" VerticalAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="55" Width="150" FontSize="20" Margin="1,3,1,1" Click="BtnPrint_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="832" Margin="151,240,9,479">
+            <Label x:Name="lblSelectLocation" Content="Select Location" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="45" Width="125" FontSize="16" Margin="241,1,1,1" />
+            <ComboBox x:Name="cboSelectLocation" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Width="225" Height="45" Margin="4,1,1,1" SelectionChanged="CboSelectLocation_SelectionChanged"/>
+        </StackPanel>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Height="400" Width="832" Margin="152,290,8,79">
+            <DataGrid x:Name="dgrResults" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="395" Width="825" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue"/>
+        </StackPanel>
+    </Grid>
+</Window>

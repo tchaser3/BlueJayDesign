@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ComputedProductivityDataSet" targetNamespace="http://tempuri.org/ComputedProductivityDataSet.xsd" xmlns:mstns="http://tempuri.org/ComputedProductivityDataSet.xsd" xmlns="http://tempuri.org/ComputedProductivityDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ComputedProductivityDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ComputedProductivityDataSet" msprop:Generator_UserDSName="ComputedProductivityDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="productivity" msprop:Generator_TableClassName="productivityDataTable" msprop:Generator_TableVarName="tableproductivity" msprop:Generator_RowChangedName="productivityRowChanged" msprop:Generator_TablePropName="productivity" msprop:Generator_RowDeletingName="productivityRowDeleting" msprop:Generator_RowChangingName="productivityRowChanging" msprop:Generator_RowEvHandlerName="productivityRowChangeEventHandler" msprop:Generator_RowDeletedName="productivityRowDeleted" msprop:Generator_RowClassName="productivityRow" msprop:Generator_UserTableName="productivity" msprop:Generator_RowEvArgName="productivityRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="AssignedProjectID" msprop:Generator_ColumnVarNameInTable="columnAssignedProjectID" msprop:Generator_ColumnPropNameInRow="AssignedProjectID" msprop:Generator_ColumnPropNameInTable="AssignedProjectIDColumn" msprop:Generator_UserColumnName="AssignedProjectID" type="xs:string" />
+              <xs:element name="Projectname" msprop:Generator_ColumnVarNameInTable="columnProjectname" msprop:Generator_ColumnPropNameInRow="Projectname" msprop:Generator_ColumnPropNameInTable="ProjectnameColumn" msprop:Generator_UserColumnName="Projectname" type="xs:string" />
+              <xs:element name="StartDate" msprop:Generator_ColumnVarNameInTable="columnStartDate" msprop:Generator_ColumnPropNameInRow="StartDate" msprop:Generator_ColumnPropNameInTable="StartDateColumn" msprop:Generator_UserColumnName="StartDate" type="xs:dateTime" />
+              <xs:element name="EndDate" msprop:Generator_ColumnVarNameInTable="columnEndDate" msprop:Generator_ColumnPropNameInRow="EndDate" msprop:Generator_ColumnPropNameInTable="EndDateColumn" msprop:Generator_UserColumnName="EndDate" type="xs:dateTime" />
+              <xs:element name="TotalHours" msprop:Generator_ColumnVarNameInTable="columnTotalHours" msprop:Generator_ColumnPropNameInRow="TotalHours" msprop:Generator_ColumnPropNameInTable="TotalHoursColumn" msprop:Generator_UserColumnName="TotalHours" type="xs:decimal" />
+              <xs:element name="EmployeeNotes" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnEmployeeNotes" msprop:Generator_ColumnPropNameInRow="EmployeeNotes" msprop:Generator_ColumnPropNameInTable="EmployeeNotesColumn" msprop:Generator_UserColumnName="EmployeeNotes" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
