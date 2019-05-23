@@ -287,6 +287,9 @@ namespace BlueJayDesign
 
                 TheMessagesClass.InformationMessage("The Survey Has Been Updated");
 
+                EnterDesignWOVTechPay EnterDesignWOVTechPay = new EnterDesignWOVTechPay();
+                EnterDesignWOVTechPay.ShowDialog();
+
                 ResetControls();
             }
             catch (Exception Ex)

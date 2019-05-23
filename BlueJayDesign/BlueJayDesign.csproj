@@ -155,6 +155,9 @@
     <Compile Include="EmployeeProductivity.xaml.cs">
       <DependentUpon>EmployeeProductivity.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnterDesignWOVTechPay.xaml.cs">
+      <DependentUpon>EnterDesignWOVTechPay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FindWOV.xaml.cs">
       <DependentUpon>FindWOV.xaml</DependentUpon>
     </Compile>
@@ -240,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EmployeeProductivity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EnterDesignWOVTechPay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
