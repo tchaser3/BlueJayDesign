@@ -118,7 +118,7 @@ namespace BlueJayDesign
                 TheFindDesignEmployeeProductivityByDateRangeDataSet = TheDesignProductivityClass.FindDesignEmployeeProductivityByDateRange(MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datStartDate, datEndDate);
 
                 intNumberOfRecords = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Rows.Count - 1;
-
+                 /*
                 if(intNumberOfRecords > -1)
                 {
                     for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
@@ -144,6 +144,7 @@ namespace BlueJayDesign
                         TheComputedProductivityDataSet.productivity.Rows.Add(NewProductivityRow);
                     }
                 }
+                */
 
                 dgrResults.ItemsSource = TheComputedProductivityDataSet.productivity;
 

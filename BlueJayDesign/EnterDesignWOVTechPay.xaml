@@ -6,8 +6,163 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:BlueJayDesign"
         mc:Ignorable="d"
-        Title="Blue Jay Communications Design Application" Height="800" Width="1000">
+        Title="Blue Jay Communications Design Application" Height="800" Width="1000" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#358AB1" />
+            <Setter Property="Foreground" Value="#FFC9E0DC" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="./#Segoe UI" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Path x:Name="PathIcon" Width="0" Height="0" Stretch="Fill" Fill="#4C87B3" HorizontalAlignment="Left" Margin="17,0,0,0" Data="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF635B5B" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="PathIcon" Property="Fill" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter Property="Background" Value="#FF635B5B" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter TargetName="PathIcon" Property="Fill" Value="Black" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF981E2A" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="1,1" StartPoint="0.5,0">
+                <GradientStop Color="AliceBlue" Offset="0"/>
+                <GradientStop Color="LightBlue" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid Height="75" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="731*"/>
+                <ColumnDefinition Width="261*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnHome" Content="Home" HorizontalAlignment="Left" Margin="157,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnHome_Click"/>
+            <Button x:Name="btnAssignTask" Content="Assign Task" HorizontalAlignment="Left" Margin="284,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnAssignTask_Click"/>
+            <Button x:Name="btnMyTasks" Content="My Tasks" HorizontalAlignment="Left" Margin="411,10,0,0" VerticalAlignment="Top" Width="127" Height="55" Click="BtnMyTasks_Click"/>
+            <Button x:Name="btnEmail" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="538,10,0,0" Height="55" Click="BtnEmail_Click"/>
+            <Button x:Name="btnHelp" Content="Help" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="665,10,0,0" Height="55" Click="BtnHelp_Click" Grid.ColumnSpan="2"/>
+            <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Margin="61.173,10,0,0" Height="55" Click="BtnClose_Click" Grid.Column="1"/>
+            <Image HorizontalAlignment="Left" Height="75" VerticalAlignment="Top" Width="149" Stretch="Fill" Source="logo.png"/>
+        </Grid>
+        <StackPanel x:Name="spaSideMenu" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="150" Height="675" Margin="0,84,0,10">
+            <Label x:Name="lblDataEntry" Content="Design Information" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="150" FontSize="16" />
+            <Button x:Name="btnAddNewProject" Content="Add New Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnAddNewProject_Click" />
+            <Button x:Name="btnAssignSurveyor" Content="Assign Surveyor" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnAssignSurveyor_Click" />
+            <Button x:Name="btnUpdateSurvey" Content="Update Survey" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnUpdateSurvey_Click" />
+            <Button x:Name="btnUpdateProject" Content="Update Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnUpdateProject_Click" />
+            <Button x:Name="btnCloseProject" Content="Close Project" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnCloseProject_Click" />
+            <Button x:Name="btnViewProjectInfo" Content="View Project Info" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnViewProjectInfo_Click" />
+            <Button x:Name="btnEmployeeProductivity" Content="Employee Productivity" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnEmployeeProductivity_Click" />
+            <Label x:Name="lblProjectReports" Content="Design Reports" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="150" FontSize="16" />
+            <Button x:Name="btnOpenDesignProjects" Content="Open Design Projects" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnOpenDesignProjects_Click"/>
+            <Button x:Name="btnDesignProjectReport" Content="Design Project Report" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnDesignProjectReport_Click"/>
+            <Button x:Name="btnPolePermitReport" Content="Pole Permit Report" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnPolePermitReport_Click"/>
+            <Button x:Name="btnOpenSurveryorReport" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnOpenSurveryorReport_Click" >
+                <TextBlock TextWrapping="Wrap" Text="Open  Surveyor  Report" TextAlignment="Center"/>
+            </Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,120,8,599">
+            <Label x:Name="lblTitle" Content="Enter Your Techpay and Productivity" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" FontSize="22" Width="832" Margin="3,0,-3,0" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="154,175,6,544">
+            <Label x:Name="lblFullTimeEmployee" Content="Full Time Employees" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="22" Height="45" Width="832" Margin="1,3,1,1" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="152,242,424,327">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblDate" Content="Enter Date" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtDate" TabIndex="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Width="250" Height="35" Margin="1,2,1,1" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblStartTime" Content="Start Time" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtStartTime" TabIndex="1" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Width="250" Height="35" Margin="1,2,1,1" />
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblEndTime" Content="End Time" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtEndTime" TabIndex="2" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Width="250" Height="35" Margin="1,2,1,1" />
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblEnterTechPayItem" Content="Enter Techpay Item" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtEnterTechPayItem" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="3" CharacterCasing="Upper" Height="35" Width="250" FontSize="16" TextChanged="TxtEnterTechPayItem_TextChanged" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="416" Height="40">
+                <Label x:Name="lblSelectTechPayItem" Content="Select Techpay Item" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16"/>
+                <ComboBox x:Name="cboSelectTechPayItem" IsReadOnly="True" TabIndex="4" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="250" FontSize="16" Margin="1,2,1,1" SelectionChanged="CboSelectTechPayItem_SelectionChanged"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="573,242,3,327">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblTechPayPrice" Content="Techpay Price" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtTechPayPrice" IsReadOnly="True" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="250" FontSize="16"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblQuantity" Content="Quantity" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtQuantity" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" CharacterCasing="Upper" Height="35" Width="250" FontSize="16"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">
+                <Button x:Name="btnAttachTechPaySheet" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="6" FontSize="18" Margin="155,2,1,1">
+                    <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">
+                <Button x:Name="btnProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="7" FontSize="18" Content="Process" Margin="155,2,1,1"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,466,8,253">
+            <Label x:Name="lblContractorTechPay" Content="Contractor Techpay" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="22" Height="45" Width="832" Margin="1,2,1,1"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="155,530,421,39" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblContractorDate" Content="Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="35" Width="150"/>
+                <TextBox x:Name="txtContractorDate" TabIndex="8" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416" >
+                <Label x:Name="lblContractorEnterTechPayItem" Content="Enter Techpay Item" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150" Height="35"/>
+                <ComboBox x:Name="cboContractorTechPayItem" TabIndex="9" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblContractorTechPayPrice" Content="Techpay Price" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtContractorTechPayPrice" IsReadOnly="True" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" Height="35" Width="250" FontSize="16"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblContractorQuantity" Content="Quantity" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="35" Width="150"/>
+                <TextBox x:Name="txtContractorQuantity" TabIndex="10" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="574,530,2,39" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="416">
+                <Button x:Name="btnContractorAttachTechPaySheet"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="11" FontSize="18" Margin="155,2,1,1">
+                    <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="416">
+                <Button x:Name="btnContratorProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="12" FontSize="18" Content="Process" Margin="155,2,1,1"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

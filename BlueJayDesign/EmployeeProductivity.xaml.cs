@@ -295,7 +295,7 @@ namespace BlueJayDesign
                     return;
                 }
 
-                blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(intProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gdatStartDate, gdatEndDate, strEmployeeNotes);
+                //blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(intProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gdatStartDate, gdatEndDate, strEmployeeNotes);
 
                 if (blnFatalError == true)
                     throw new Exception();
