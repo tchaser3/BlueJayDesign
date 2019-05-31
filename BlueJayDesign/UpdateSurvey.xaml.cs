@@ -208,6 +208,7 @@ namespace BlueJayDesign
                 }
 
                 MainWindow.gintProjectID = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID[0].ProjectID;
+                MainWindow.gintWarehouseID = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID[0].OfficeID;
 
                 TheFindOpenDesignProjectSurveyorByProjectIDDataSet = TheDesignProjectsSurveyorClass.FindOpenDesignProjectSurveyorByProjectID(MainWindow.gintProjectID);
 

@@ -84,6 +84,9 @@
     <Reference Include="NewEventLogDLL">
       <HintPath>..\..\Blue Jay Class Library\NewEventLogDLL.dll</HintPath>
     </Reference>
+    <Reference Include="ProductivityToTechPayDLL">
+      <HintPath>..\..\Blue Jay Class Library\ProductivityToTechPayDLL.dll</HintPath>
+    </Reference>
     <Reference Include="ProjectsDLL">
       <HintPath>..\..\Blue Jay Class Library\ProjectsDLL.dll</HintPath>
     </Reference>

@@ -22,6 +22,8 @@ using WOVInvoicingDLL;
 using TechPayDLL;
 using DataValidationDLL;
 using DesignProductivityDLL;
+using DesignProjectDocumentation;
+using ProductivityToTechPayDLL;
 
 namespace BlueJayDesign
 {
@@ -37,13 +39,18 @@ namespace BlueJayDesign
         TechPayClass TheTechPayClass = new TechPayClass();
         DataValidationClass TheDataValidationClass = new DataValidationClass();
         DesignProductivityClass TheDesignProductivityClass = new DesignProductivityClass();
+        DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
+        ProductivityToTechPayClass TheProductivityToTechPayClass = new ProductivityToTechPayClass();
 
         //setting up the data variables
         FindTechPayItemByDescriptionDataSet TheFindTechPayItemByDescriptionDataSet = new FindTechPayItemByDescriptionDataSet();
+        FindProductivityToTechPayByTechPayIDDataSet TheFindProductivityToTechPayByTechPayIDDataSet = new FindProductivityToTechPayByTechPayIDDataSet();
 
         //setting up global variables
-        int gintTaskID;
+        int gintTechPayID;
+        int gintProductivityID;
         bool gblnTechPayAttached;
+        bool gblnHoursComputed;
 
         public EnterDesignWOVTechPay()
         {
@@ -163,6 +170,8 @@ namespace BlueJayDesign
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             gblnTechPayAttached = false;
+            gblnHoursComputed = false;
+            txtDate.Text = Convert.ToString(DateTime.Now);
         }
 
         private void TxtEnterTechPayItem_TextChanged(object sender, TextChangedEventArgs e)
@@ -210,6 +219,7 @@ namespace BlueJayDesign
         {
             int intSelectedIndex;
             decimal decTechPayCost = 0;
+            int intRecordsReturned;
 
             try
             {
@@ -217,10 +227,37 @@ namespace BlueJayDesign
 
                 if(intSelectedIndex > -1)
                 {
-                    gintTaskID = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayID;
+                    gintTechPayID = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayID;
                     decTechPayCost = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayPrice;
 
                     txtTechPayPrice.Text = Convert.ToString(decTechPayCost);
+                }
+
+                TheFindProductivityToTechPayByTechPayIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByTechPayID(gintTechPayID);
+
+                intRecordsReturned = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID.Rows.Count;
+
+                if(intRecordsReturned > 1)
+                {
+                    const string message = "Did You Do Spans?";
+                    const string caption = "Please Answer";
+                    MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[0].ProductivityID;
+                    }
+                    else
+                    {
+                        gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[1].ProductivityID;
+                    }
+
+                    TheFindProductivityToTechPayByTechPayIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByTechPayID(0);
+                    
+                }
+                else if (intRecordsReturned == 1)
+                {
+                    gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[0].ProductivityID;
                 }
             }
             catch (Exception Ex)
@@ -229,6 +266,197 @@ namespace BlueJayDesign
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+
+        private void BtnAttachTechPaySheet_Click(object sender, RoutedEventArgs e)
+        {
+            AttachDocuments();
+        }
+        private void AttachDocuments()
+        {
+            //setting local variables
+            string strDocumentPath;
+            string strDocumentType = "TECHPAY SHEET";
+            bool blnFatalError = false;
+            DateTime datTransactionDate = DateTime.Now;
+
+            try
+            {
+                gblnTechPayAttached = true;
+
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.FileName = "Document"; // Default file name
+
+                // Show open file dialog box
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process open file dialog box results
+                if (result == true)
+                {
+                    // Open document
+                    strDocumentPath = dlg.FileName.ToUpper();
+                }
+                else
+                {
+                    return;
+                }
+
+                blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                TheMessagesClass.InformationMessage("The Documents have been Added");
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Attach Documents " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void BtnContractorAttachTechPaySheet_Click(object sender, RoutedEventArgs e)
+        {
+            AttachDocuments();
+        }
+
+        private void BtnProcess_Click(object sender, RoutedEventArgs e)
+        {
+            //setting local variables
+            string strValueForValidation;
+            string strErrorMessage = "";
+            bool blnThereIsAProblem = false;
+            bool blnFatalError = false;
+            DateTime datTransactionDate = DateTime.Now;
+            int intQuantity = 0;
+            string strStartTime;
+            string strEndTime;
+            decimal decTotalHours;
+            decimal decTechPayPrice;
+            decimal decTotalTechPayPrice;
+
+            try
+            {
+                strValueForValidation = txtDate.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyDateData(strValueForValidation);
+                if(blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Date Entered is not a Date\n";
+                }
+                else
+                {
+                    datTransactionDate = Convert.ToDateTime(strValueForValidation);
+                }
+                strStartTime = txtStartTime.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strStartTime);
+                if(blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Start Time is not a Time\n";
+                }
+                strEndTime = txtEndTime.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strStartTime);
+                if (blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The End Time is not a Time\n";
+                }
+                if(cboSelectTechPayItem.SelectedIndex < 1)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Techpay Item was not Selected\n";
+                }
+                strValueForValidation = txtQuantity.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                if(blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Quantity Entered is not an Integer\n";
+                }
+                else
+                {
+                    intQuantity = Convert.ToInt32(strValueForValidation);
+                }
+                if(gblnTechPayAttached == false)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Techpay Sheet was not Attached\n";
+                }
+                if(blnFatalError == true)
+                {
+                    TheMessagesClass.ErrorMessage(strErrorMessage);
+                    return;
+                }
+
+                decTotalHours = CalculateTimeSpan(strStartTime, strEndTime);
+
+                if(gblnHoursComputed == true)
+                {
+                    decTotalHours = 0;
+                }
+
+                decTechPayPrice = Convert.ToDecimal(txtTechPayPrice.Text);
+                decTotalTechPayPrice = decTechPayPrice * intQuantity;
+
+                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gintProductivityID, decTotalHours, datTransactionDate);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                gblnHoursComputed = true;
+                txtEnterTechPayItem.Text = "";
+                cboSelectTechPayItem.Items.Clear();
+                txtQuantity.Text = "";
+                txtTechPayPrice.Text = "";
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Process Button " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        private decimal CalculateTimeSpan(string strStartTime, string strEndTime)
+        {
+            decimal decTotalHours = 0;
+            TimeSpan tspStartTime;
+            TimeSpan tspEndTime;
+            TimeSpan tspTotalTime;
+            decimal decHours;
+            decimal decMinutes;
+            int intMinutes;
+            
+            try
+            {
+                tspStartTime = TimeSpan.Parse(strStartTime);
+
+                tspEndTime = TimeSpan.Parse(strEndTime);
+
+                tspTotalTime = tspEndTime - tspStartTime;
+
+                decHours = Convert.ToDecimal(tspTotalTime.Hours);
+                intMinutes = tspTotalTime.Minutes;
+                decMinutes = Convert.ToDecimal(intMinutes) / 60;
+
+                decTotalHours = decHours + decMinutes;
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Calculate Time Span " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+            return decTotalHours;
         }
     }
 }

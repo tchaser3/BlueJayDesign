@@ -125,12 +125,12 @@
                 <TextBox x:Name="txtQuantity" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TabIndex="5" CharacterCasing="Upper" Height="35" Width="250" FontSize="16"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">
-                <Button x:Name="btnAttachTechPaySheet" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="6" FontSize="18" Margin="155,2,1,1">
+                <Button x:Name="btnAttachTechPaySheet" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="6" FontSize="18" Margin="155,2,1,1" Click="BtnAttachTechPaySheet_Click">
                     <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">
-                <Button x:Name="btnProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="7" FontSize="18" Content="Process" Margin="155,2,1,1"/>
+                <Button x:Name="btnProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="7" FontSize="18" Content="Process" Margin="155,2,1,1" Click="BtnProcess_Click"/>
             </StackPanel>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,466,8,253">
@@ -156,7 +156,7 @@
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="574,530,2,39" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="416">
-                <Button x:Name="btnContractorAttachTechPaySheet"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="11" FontSize="18" Margin="155,2,1,1">
+                <Button x:Name="btnContractorAttachTechPaySheet"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="11" FontSize="18" Margin="155,2,1,1" Click="BtnContractorAttachTechPaySheet_Click">
                     <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
                 </Button>
             </StackPanel>
