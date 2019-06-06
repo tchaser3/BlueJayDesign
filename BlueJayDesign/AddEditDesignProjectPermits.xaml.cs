@@ -207,6 +207,9 @@ namespace BlueJayDesign
 
                 TheMessagesClass.InformationMessage("Permit Has Been Entered/Updated");
 
+                EnterDesignWOVTechPay EnterDesignWOVTechPay = new EnterDesignWOVTechPay();
+                EnterDesignWOVTechPay.ShowDialog();
+
                 ResetrControls();
             }
             catch (Exception Ex)

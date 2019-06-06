@@ -36,10 +36,8 @@ namespace BlueJayDesign
 
         //setting up data
         FindDesignEmployeeProductivityByDateRangeDataSet TheFindDesignEmployeeProductivityByDateRangeDataSet = new FindDesignEmployeeProductivityByDateRangeDataSet();
-        ComputedProductivityDataSet TheComputedProductivityDataSet = new ComputedProductivityDataSet();
-
-        decimal gdecTotalHours;
-
+        FindDesignTotalEmployeeProductivityHoursDataSet TheFindDesignTotalEmployeeProductivityHoursDataSet = new FindDesignTotalEmployeeProductivityHoursDataSet();
+        
         public MyProductivity()
         {
             InitializeComponent();
@@ -63,18 +61,9 @@ namespace BlueJayDesign
             bool blnFatalError = false;
             DateTime datStartDate = DateTime.Now;
             DateTime datEndDate = DateTime.Now;
-            int intCounter;
-            int intNumberOfRecords;
-            decimal decTransactionHours = 0;
-            DateTime datTransactionStartDate;
-            DateTime datTransactionEndTime;
-
+            
             try
             {
-                //clearing data set
-                TheComputedProductivityDataSet.productivity.Rows.Clear();
-                gdecTotalHours = 0;
-
                 //data Valiation
                 strValueForValidation = txtStartDate.Text;
                 blnThereIsAProblem = TheDataValidationClass.VerifyDateData(strValueForValidation);
@@ -116,39 +105,11 @@ namespace BlueJayDesign
 
                 //loading the data set
                 TheFindDesignEmployeeProductivityByDateRangeDataSet = TheDesignProductivityClass.FindDesignEmployeeProductivityByDateRange(MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datStartDate, datEndDate);
+                TheFindDesignTotalEmployeeProductivityHoursDataSet = TheDesignProductivityClass.FindDesignTotalEmployeeProductivityHours(MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datStartDate, datEndDate);
 
-                intNumberOfRecords = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Rows.Count - 1;
-                 /*
-                if(intNumberOfRecords > -1)
-                {
-                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
-                    {
-                        datTransactionStartDate = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[intCounter].StartTime;
-                        datTransactionEndTime = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[intCounter].EndTime;
+                dgrResults.ItemsSource = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange;
 
-                        decTransactionHours = Convert.ToDecimal((datTransactionEndTime - datTransactionStartDate).TotalHours);
-
-                        decTransactionHours = Math.Round(decTransactionHours, 2);
-
-                        gdecTotalHours += decTransactionHours;
-
-                        ComputedProductivityDataSet.productivityRow NewProductivityRow = TheComputedProductivityDataSet.productivity.NewproductivityRow();
-
-                        NewProductivityRow.AssignedProjectID = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[intCounter].AssignedProjectID;
-                        NewProductivityRow.EmployeeNotes = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[intCounter].EmployeeNotes;
-                        NewProductivityRow.EndDate = datTransactionEndTime;
-                        NewProductivityRow.Projectname = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[0].ProjectName;
-                        NewProductivityRow.StartDate = datTransactionStartDate;
-                        NewProductivityRow.TotalHours = decTransactionHours;
-
-                        TheComputedProductivityDataSet.productivity.Rows.Add(NewProductivityRow);
-                    }
-                }
-                */
-
-                dgrResults.ItemsSource = TheComputedProductivityDataSet.productivity;
-
-                txtTotalHours.Text = Convert.ToString(gdecTotalHours);
+                txtTotalHours.Text = Convert.ToString(TheFindDesignTotalEmployeeProductivityHoursDataSet.FindDesignTotalEmployeeProductivityHours[0].TotalHours);
             }
             catch (Exception Ex)
             {
@@ -179,12 +140,12 @@ namespace BlueJayDesign
 
                 int cellRowIndex = 1;
                 int cellColumnIndex = 1;
-                intRowNumberOfRecords = TheComputedProductivityDataSet.productivity.Rows.Count;
-                intColumnNumberOfRecords = TheComputedProductivityDataSet.productivity.Columns.Count;
+                intRowNumberOfRecords = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Rows.Count;
+                intColumnNumberOfRecords = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Columns.Count;
 
                 for (intColumnCounter = 0; intColumnCounter < intColumnNumberOfRecords; intColumnCounter++)
                 {
-                    worksheet.Cells[cellRowIndex, cellColumnIndex] = TheComputedProductivityDataSet.productivity.Columns[intColumnCounter].ColumnName;
+                    worksheet.Cells[cellRowIndex, cellColumnIndex] = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Columns[intColumnCounter].ColumnName;
 
                     cellColumnIndex++;
                 }
@@ -197,7 +158,7 @@ namespace BlueJayDesign
                 {
                     for (intColumnCounter = 0; intColumnCounter < intColumnNumberOfRecords; intColumnCounter++)
                     {
-                        worksheet.Cells[cellRowIndex, cellColumnIndex] = TheComputedProductivityDataSet.productivity.Rows[intRowCounter][intColumnCounter].ToString();
+                        worksheet.Cells[cellRowIndex, cellColumnIndex] = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Rows[intRowCounter][intColumnCounter].ToString();
 
                         cellColumnIndex++;
                     }
@@ -251,7 +212,7 @@ namespace BlueJayDesign
                     Table cancelledTable = new Table();
                     fdCancelledLines.Blocks.Add(cancelledTable);
                     cancelledTable.CellSpacing = 0;
-                    intColumns = TheComputedProductivityDataSet.productivity.Columns.Count;
+                    intColumns = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Columns.Count;
 
                     for (int intColumnCounter = 0; intColumnCounter < intColumns; intColumnCounter++)
                     {
@@ -273,13 +234,13 @@ namespace BlueJayDesign
                     cancelledTable.RowGroups[0].Rows.Add(new TableRow());
                     intCurrentRow++;
                     newTableRow = cancelledTable.RowGroups[0].Rows[intCurrentRow];
+                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Transaction ID"))));
+                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Transaction Date"))));
                     newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Project ID"))));
                     newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Project Name"))));
-                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Start Date"))));
-                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("End Date"))));
-                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Hours"))));
-                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Notes"))));
-
+                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Task ID"))));
+                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Task"))));
+                    newTableRow.Cells.Add(new TableCell(new Paragraph(new Run("Total Hours"))));
 
                     //Format Header Row
                     for (intCounter = 0; intCounter < intColumns; intCounter++)
@@ -291,7 +252,7 @@ namespace BlueJayDesign
                         newTableRow.Cells[intCounter].BorderThickness = new Thickness();
                     }
 
-                    intNumberOfRecords = TheComputedProductivityDataSet.productivity.Rows.Count;
+                    intNumberOfRecords = TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange.Rows.Count;
 
                     //Data, Format Data
 
@@ -302,7 +263,7 @@ namespace BlueJayDesign
                         newTableRow = cancelledTable.RowGroups[0].Rows[intCurrentRow];
                         for (int intColumnCounter = 0; intColumnCounter < intColumns; intColumnCounter++)
                         {
-                            newTableRow.Cells.Add(new TableCell(new Paragraph(new Run(TheComputedProductivityDataSet.productivity[intReportRowCounter][intColumnCounter].ToString()))));
+                            newTableRow.Cells.Add(new TableCell(new Paragraph(new Run(TheFindDesignEmployeeProductivityByDateRangeDataSet.FindDesignEmployeeProductivityByDateRange[intReportRowCounter][intColumnCounter].ToString()))));
 
 
                             newTableRow.Cells[intColumnCounter].FontSize = 12;

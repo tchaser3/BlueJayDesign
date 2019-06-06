@@ -344,7 +344,7 @@ namespace BlueJayDesign
                 if (blnFatalError == true)
                     throw new Exception();
 
-                blnFatalError = TheDesignProjectsClass.CloseDesignProject(MainWindow.gintTransactionID, datClosingDate);
+                blnFatalError = TheDesignProjectsClass.UpdateDesignProjectJobStatus(MainWindow.gintTransactionID, "INVOICED");
 
                 if (blnFatalError == true)
                     throw new Exception();

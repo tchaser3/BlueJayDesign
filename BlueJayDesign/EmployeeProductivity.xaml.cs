@@ -21,6 +21,8 @@ using NewEventLogDLL;
 using DesignProjectsDLL;
 using DesignProductivityDLL;
 using DataValidationDLL;
+using WorkTaskDLL;
+using DateSearchDLL;
 
 namespace BlueJayDesign
 {
@@ -35,14 +37,18 @@ namespace BlueJayDesign
         DesignProjectsClass TheDesignProjectsClass = new DesignProjectsClass();
         DesignProductivityClass TheDesignProductivityClass = new DesignProductivityClass();
         DataValidationClass TheDataValidationClass = new DataValidationClass();
+        WorkTaskClass TheWorkTaskClass = new WorkTaskClass();
+        DateSearchClass TheDateSearchClass = new DateSearchClass();
 
         //setting up the data
         FindDesignProjectsByAssignedProjectIDDataSet TheFindDesignProjectsByAssignedProjectIDDataSet = new FindDesignProjectsByAssignedProjectIDDataSet();
+        FindWorkTaskByTaskKeywordDataSet TheFindWorkTaskByTaskKeywordDataSet = new FindWorkTaskByTaskKeywordDataSet();
+        FindDesignTotalEmployeeProductivityHoursDataSet TheFindEmployeeTotalProductivityHoursDataSet = new FindDesignTotalEmployeeProductivityHoursDataSet();
 
-        //setting global variables
-        DateTime gdatStartDate;
-        DateTime gdatEndDate;
-
+        //setting up the global variables
+        string gstrProjectID;
+        bool gblnHoursEntered;
+        
         public EmployeeProductivity()
         {
             InitializeComponent();
@@ -160,134 +166,78 @@ namespace BlueJayDesign
         }
         private void ResetControls()
         {
-            dpkStartDate.Text = "";
-            dpkEndDate.Text = "";
             txtEndTime.Text = "";
-            txtStartTime.Text = "";
+            txtEnterDate.Text = "";
+            txtProductivityItem.Text = "";
             txtProjectID.Text = "";
-            txtProjectNotes.Text = "";
+            txtStartTime.Text = "";
+            gblnHoursEntered = false;
         }
-
-        private void Calendar_DisplayDateChanged(object sender, CalendarDateChangedEventArgs e)
-        {
-
-        }
-
-        private void DpkStartDate_CalendarClosed(object sender, RoutedEventArgs e)
-        {
-            string strDatePicked;
-
-            strDatePicked = dpkStartDate.Text;
-
-            gdatStartDate = Convert.ToDateTime(strDatePicked);
-        }
-
-        private void DpkEndDate_CalendarClosed(object sender, RoutedEventArgs e)
-        {
-            string strDatePicked;
-
-            strDatePicked = dpkStartDate.Text;
-
-            gdatEndDate = Convert.ToDateTime(strDatePicked);
-        }
-
         private void BtnProcess_Click(object sender, RoutedEventArgs e)
         {
-            bool blnFatalError = false;
-            double douHours;
-            double douMinutes;
+            //setting local variable
             string strValueForValidation;
-            string strErrorMessage = "";
+            bool blnFatalError = false;
             bool blnThereIsAProblem = false;
-            string strAssignedProjectID;
-            int intProjectID = 0;
-            string strEmployeeNotes;
-            DateTime datTempTime;
+            string strErrorMessage = "";
+            decimal decTotalHours;
+            string strStartTime;
+            string strEndTime;
+            DateTime datTransactionDate = DateTime.Now;
             int intRecordsReturned;
+            DateTime datTomorrow;
+            decimal decTotalHoursRecorded;
 
             try
             {
-                strValueForValidation = dpkStartDate.Text;
+                //beginning data validation
+                strValueForValidation = txtEnterDate.Text;
                 blnThereIsAProblem = TheDataValidationClass.VerifyDateData(strValueForValidation);
                 if(blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
-                    strErrorMessage += "The Start Date is not a Date\n";
+                    strErrorMessage += "The Date Entered is not a Date\n";
                 }
                 else
                 {
-                    gdatStartDate = Convert.ToDateTime(strValueForValidation);
+                    datTransactionDate = Convert.ToDateTime(strValueForValidation);
                 }
-                strValueForValidation = dpkEndDate.Text;
-                blnThereIsAProblem = TheDataValidationClass.VerifyDateData(strValueForValidation);
-                if (blnThereIsAProblem == true)
-                {
-                    blnFatalError = true;
-                    strErrorMessage += "The End Date is not a Date\n";
-                }
-                else
-                {
-                    gdatEndDate = Convert.ToDateTime(strValueForValidation);
-                }
-                strValueForValidation = txtStartTime.Text;
-                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strValueForValidation);
+                strStartTime = txtStartTime.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strStartTime);
                 if(blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
-                    strErrorMessage += "Start Time is not a Time\n";
+                    strErrorMessage += "The Start Time is not a Time\n";
                 }
-                else
-                {
-                    datTempTime = Convert.ToDateTime(strValueForValidation);
-                    douHours = datTempTime.Hour;
-                    douMinutes = datTempTime.Minute;
-
-                    gdatStartDate = gdatStartDate.AddHours(douHours);
-                    gdatStartDate = gdatStartDate.AddMinutes(douMinutes);
-                }
-                strValueForValidation = txtEndTime.Text;
-                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strValueForValidation);
-                if (blnThereIsAProblem == true)
+                strEndTime = txtEndTime.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strEndTime);
+                if(blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
-                    strErrorMessage += "Start Time is not a Time\n";
+                    strErrorMessage += "The End Time is not a Time\n";
                 }
-                else
-                {
-                    datTempTime = Convert.ToDateTime(strValueForValidation);
-                    douHours = datTempTime.Hour;
-                    douMinutes = datTempTime.Minute;
-
-                    gdatEndDate = gdatEndDate.AddHours(douHours);
-                    gdatEndDate = gdatEndDate.AddMinutes(douMinutes);
-                }
-                strAssignedProjectID = txtProjectID.Text;
-                if(strAssignedProjectID == "")
+                gstrProjectID = txtProjectID.Text;
+                if(gstrProjectID == "")
                 {
                     blnFatalError = true;
-                    strErrorMessage += "Project ID Not Found\n";
+                    strErrorMessage += "The Project ID was not Entered\n";
                 }
                 else
                 {
-                    TheFindDesignProjectsByAssignedProjectIDDataSet = TheDesignProjectsClass.FindDesignProjectsByAssignedProjectID(strAssignedProjectID);
+                    TheFindDesignProjectsByAssignedProjectIDDataSet = TheDesignProjectsClass.FindDesignProjectsByAssignedProjectID(gstrProjectID);
 
                     intRecordsReturned = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID.Rows.Count;
 
                     if(intRecordsReturned < 1)
                     {
                         blnFatalError = true;
-                        strErrorMessage += "The Project Was Not Found\n";
-                    }
-                    else
-                    {
-                        intProjectID = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID[0].ProjectID;
+                        strErrorMessage += "The Project ID Was Not Found\n";
                     }
                 }
-                strEmployeeNotes = txtProjectNotes.Text;
-                if(strEmployeeNotes == "")
+                if(cboSelectProductivityItem.SelectedIndex < 1)
                 {
                     blnFatalError = true;
-                    strErrorMessage += "Employee Notes Were Not Entered\n";
+                    strErrorMessage += "The Productivity Item was not Selected\n";
                 }
                 if(blnFatalError == true)
                 {
@@ -295,15 +245,43 @@ namespace BlueJayDesign
                     return;
                 }
 
-                //blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(intProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gdatStartDate, gdatEndDate, strEmployeeNotes);
+                if(gblnHoursEntered == true)
+                {
+                    decTotalHours = 0;
+                }
+                else
+                {
+                    decTotalHours = ComputeTotalHours(strStartTime, strEndTime);
+                }
+
+                datTransactionDate = TheDateSearchClass.RemoveTime(datTransactionDate);
+                datTomorrow = datTransactionDate;
+
+                TheFindEmployeeTotalProductivityHoursDataSet = TheDesignProductivityClass.FindDesignTotalEmployeeProductivityHours(MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, datTomorrow);
+
+                intRecordsReturned = TheFindEmployeeTotalProductivityHoursDataSet.FindDesignTotalEmployeeProductivityHours.Rows.Count;
+
+                if(intRecordsReturned > 0)
+                {
+                    decTotalHoursRecorded = TheFindEmployeeTotalProductivityHoursDataSet.FindDesignTotalEmployeeProductivityHours[0].TotalHours + decTotalHours;
+
+                    if(decTotalHoursRecorded > 16)
+                    {
+                        TheMessagesClass.ErrorMessage("Your Cannot Work Over 16 Hours");
+                        return;
+                    }
+                }
+
+                blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWorkTaskID, decTotalHours, datTransactionDate);
 
                 if (blnFatalError == true)
                     throw new Exception();
 
-                TheMessagesClass.ErrorMessage("Productivity Has Been Entered");
+                TheMessagesClass.InformationMessage("The Productivity Has Been Entered");
 
-                ResetControls();
-
+                txtProductivityItem.Text = "";
+                cboSelectProductivityItem.Items.Clear();
+                gblnHoursEntered = true;
             }
             catch (Exception Ex)
             {
@@ -312,10 +290,112 @@ namespace BlueJayDesign
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
         }
+        private decimal ComputeTotalHours(string strStartTime, string strEndTime)
+        {
+            decimal decTotalHours = 0;
+            TimeSpan tspStartTime;
+            TimeSpan tspEndTime;
+            TimeSpan tspTotalTime;
+            decimal decHours;
+            decimal decMinutes;
+            int intMinutes;
+
+            try
+            {
+                tspStartTime = TimeSpan.Parse(strStartTime);
+
+                tspEndTime = TimeSpan.Parse(strEndTime);
+
+                tspTotalTime = tspEndTime - tspStartTime;
+
+                decHours = Convert.ToDecimal(tspTotalTime.Hours);
+                intMinutes = tspTotalTime.Minutes;
+                decMinutes = Convert.ToDecimal(intMinutes) / 60;
+
+                decTotalHours = decHours + decMinutes;
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Employee Productivity // Calculate Time Span " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+            return decTotalHours;
+        }
         private void BtnMyProductivity_Click(object sender, RoutedEventArgs e)
         {
             MyProductivity MyProductivity = new MyProductivity();
             MyProductivity.ShowDialog();
+        }
+
+        private void TxtProductivityItem_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string strProductivityItem;
+            int intLength;
+            int intCounter;
+            int intNumberOfRecords;
+            
+            try
+            {
+                //checking project id
+                gstrProjectID = txtProjectID.Text;
+                TheFindDesignProjectsByAssignedProjectIDDataSet = TheDesignProjectsClass.FindDesignProjectsByAssignedProjectID(gstrProjectID);
+                intNumberOfRecords = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID.Rows.Count;
+                if(intNumberOfRecords < 1)
+                {
+                    TheMessagesClass.ErrorMessage("The Project ID was not Found");
+                    return;
+                }
+
+                MainWindow.gintProjectID = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID[0].ProjectID;
+
+                //getting productivity item
+                strProductivityItem = txtProductivityItem.Text;
+                intLength = strProductivityItem.Length;
+
+                if(intLength > 2)
+                {
+                    cboSelectProductivityItem.Items.Clear();
+                    cboSelectProductivityItem.Items.Add("Select Productivity Item");
+
+                    TheFindWorkTaskByTaskKeywordDataSet = TheWorkTaskClass.FindWorkTaskByTaskKeyword(strProductivityItem);
+
+                    intNumberOfRecords = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword.Rows.Count - 1;
+
+                    if(intNumberOfRecords< 0)
+                    {
+                        TheMessagesClass.ErrorMessage("The Productivity Item Was Not Found");
+                        return;
+                    }
+
+                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        cboSelectProductivityItem.Items.Add(TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intCounter].WorkTask);
+                    }
+
+                    cboSelectProductivityItem.SelectedIndex = 0;
+                }
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Employee Productivity // Productivity Item Text Box " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void CboSelectProductivityItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int intSelectedIndex;
+
+            intSelectedIndex = cboSelectProductivityItem.SelectedIndex - 1;
+
+            if(intSelectedIndex > -1)
+            {
+                MainWindow.gintWorkTaskID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
+            }
         }
     }
 }

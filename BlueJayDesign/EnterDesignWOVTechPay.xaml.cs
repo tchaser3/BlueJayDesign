@@ -24,6 +24,7 @@ using DataValidationDLL;
 using DesignProductivityDLL;
 using DesignProjectDocumentation;
 using ProductivityToTechPayDLL;
+using NewEmployeeDLL;
 
 namespace BlueJayDesign
 {
@@ -41,6 +42,7 @@ namespace BlueJayDesign
         DesignProductivityClass TheDesignProductivityClass = new DesignProductivityClass();
         DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
         ProductivityToTechPayClass TheProductivityToTechPayClass = new ProductivityToTechPayClass();
+        EmployeeClass TheEmployeeClass = new EmployeeClass();
 
         //setting up the data variables
         FindTechPayItemByDescriptionDataSet TheFindTechPayItemByDescriptionDataSet = new FindTechPayItemByDescriptionDataSet();
@@ -457,6 +459,196 @@ namespace BlueJayDesign
             }
 
             return decTotalHours;
+        }
+
+        private void TxtContractorTechPayItem_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string strTechPayItem;
+            int intLength;
+            int intCounter;
+            int intNumberOfRecords;
+
+            try
+            {
+                strTechPayItem = txtContractorTechPayItem.Text;
+                intLength = strTechPayItem.Length;
+                if (intLength > 2)
+                {
+                    cboContractorTechPayItem.Items.Clear();
+                    cboContractorTechPayItem.Items.Add("Select Techpay Item");
+
+                    TheFindTechPayItemByDescriptionDataSet = TheTechPayClass.FindTechPayItemByDescription(strTechPayItem);
+                    intNumberOfRecords = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription.Rows.Count - 1;
+
+                    if (intNumberOfRecords < 0)
+                    {
+                        TheMessagesClass.ErrorMessage("The Techpay Item Was Not Found");
+                        return;
+                    }
+
+                    for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        cboContractorTechPayItem.Items.Add(TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intCounter].JobDescription);
+                    }
+
+                    cboContractorTechPayItem.SelectedIndex = 0;
+                }
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Enter Tech Pay Item Text " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void TxtContractorLastName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string strLastName;
+            int intLength;
+            int intNumberOfRecords;
+            int intCounter;
+
+            try
+            {
+                strLastName = txtContractorLastName.Text;
+                intLength = strLastName.Length;
+                if(intLength > 2)
+                {
+                    MainWindow.TheComboEmployeeDataSet = TheEmployeeClass.FillEmployeeComboBox(strLastName);
+
+                    intNumberOfRecords = MainWindow.TheComboEmployeeDataSet.employees.Rows.Count - 1;
+
+                    if(intNumberOfRecords < 0)
+                    {
+                        TheMessagesClass.ErrorMessage("Contractor Not Found");
+                        return;
+                    }
+
+                    cboSelectContractor.Items.Clear();
+                    cboSelectContractor.Items.Add("Select Contractor");
+
+                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        cboSelectContractor.Items.Add(MainWindow.TheComboEmployeeDataSet.employees[intCounter].FullName);
+                    }
+
+                    cboSelectContractor.SelectedIndex = 0;
+                }
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Techpay // Contractor Lastname Text Box " + Ex.Message);
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void CboSelectContractor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int intSelectedIndex;
+
+            intSelectedIndex = cboSelectContractor.SelectedIndex - 1;
+
+            if(intSelectedIndex > -1)
+            {
+                MainWindow.gintEmployeeID = MainWindow.TheComboEmployeeDataSet.employees[intSelectedIndex].EmployeeID;
+            }
+        }
+
+        private void BtnContratorProcess_Click(object sender, RoutedEventArgs e)
+        {
+            //setting up local variables
+            string strValueForValidation;
+            string strErrorMessage = "";
+            bool blnThereIsAProblem = false;
+            bool blnFatalError = false;
+            int intQuantity = 0;
+            decimal decTechPayPrice;
+            decimal decTotalTechPayPrice;
+
+            try
+            {
+                if(gblnTechPayAttached == false)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "Techpay Sheet was not attached\n";
+                }
+                if(cboContractorTechPayItem.SelectedIndex < 1)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Tech Pay Item was not Selected\n";
+                }
+                strValueForValidation = txtContractorQuantity.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                if(blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Quantity Entered is not an Integer\n";
+                }
+                else
+                {
+                    intQuantity = Convert.ToInt32(strValueForValidation);
+                }
+                if(cboSelectContractor.SelectedIndex < 1)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Contractor was not Selected\n";
+                }
+                if(blnFatalError == true)
+                {
+                    TheMessagesClass.ErrorMessage(strErrorMessage);
+                    return;
+                }
+
+                decTechPayPrice = Convert.ToDecimal(txtContractorTechPayPrice.Text);
+                decTotalTechPayPrice = Convert.ToDecimal(intQuantity) * decTechPayPrice;
+
+                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.gintEmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice);
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                TheMessagesClass.InformationMessage("The Contractor Techpay Has Been Entered");
+
+                txtContractorLastName.Text = "";
+                txtContractorQuantity.Text = "";
+                txtContractorTechPayItem.Text = "";
+                txtContractorTechPayPrice.Text = "";
+                cboContractorTechPayItem.Items.Clear();
+                cboSelectContractor.Items.Clear();
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Techpay // Contractor Techpay Button " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void CboContractorTechPayItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int intSelectedIndex;
+            decimal decTechPayCost = 0;
+
+            try
+            {
+                intSelectedIndex = cboContractorTechPayItem.SelectedIndex - 1;
+
+                if (intSelectedIndex > -1)
+                {
+                    gintTechPayID = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayID;
+                    decTechPayCost = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayPrice;
+
+                    txtContractorTechPayPrice.Text = Convert.ToString(decTechPayCost);
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // cboSelectTechPayItem Change Event " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
         }
     }
 }

@@ -107,6 +107,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WorkTaskDLL">
+      <HintPath>..\..\Blue Jay Class Library\WorkTaskDLL.dll</HintPath>
+    </Reference>
     <Reference Include="WOVInvoicingDLL">
       <HintPath>..\..\Blue Jay Class Library\WOVInvoicingDLL.dll</HintPath>
     </Reference>

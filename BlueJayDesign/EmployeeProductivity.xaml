@@ -87,38 +87,38 @@
             <Label x:Name="lblTitle" Content="Design Employee Productivity" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" FontSize="22" Width="832" />
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="325" Width="416" Margin="150,170,426,274">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="416">
-                <Label x:Name="lblStartDate" Content="Start Date" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" Width="150" FontSize="20"/>
-                <DatePicker x:Name="dpkStartDate" TabIndex="0" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="250" Height="45" FontSize="20" Margin="10,1,1,1" CalendarClosed="DpkStartDate_CalendarClosed"/>
-                <Calendar DisplayDateChanged="Calendar_DisplayDateChanged"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblEnterDate" Content="Enter Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+                <TextBox x:Name="txtEnterDate" TabIndex="0" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="45" Margin="1,2,1,1"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="416">
-                <Label x:Name="lblStartTime" Content="Start Time" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" Width="150" FontSize="20"/>
-                <TextBox x:Name="txtStartTime" TabIndex="2" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="20" Height="45" Width="250" Margin="10,1,1,1"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblStartTime" Content="Start Time" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+                <TextBox x:Name="txtStartTime" TabIndex="1" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="45" Margin="1,2,1,1"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="150" Width="416">
-                <Label x:Name="lblProjectID" Content="Project ID" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="50" Width="150" FontSize="20"/>
-                <TextBox x:Name="txtProjectID" TabIndex="4" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="20" Height="50" Width="250" Margin="10,1,1,1"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblEndTime" Content="End Time" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+                <TextBox x:Name="txtEndTime" TabIndex="2" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="45" Margin="1,2,1,1"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="75" Width="416">
-                <Button x:Name="btnMyProductivity" TabIndex="6" Content="My Productivity" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" FontSize="20" Margin="160,1,1,1" Click="BtnMyProductivity_Click" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblProjectID" Content="Project ID" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16"/>
+                <TextBox x:Name="txtProjectID" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Height="45" Width="250" Margin="1,2,1,1"/>
             </StackPanel>
+            
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="325" Width="416" Margin="566,170,10,274">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="416">
-                <Label x:Name="lblEndDate" Content="End Date" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" Width="150" FontSize="20"/>
-                <DatePicker x:Name="dpkEndDate" TabIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="250" Height="45" FontSize="20" Margin="10,1,1,1" CalendarClosed="DpkEndDate_CalendarClosed" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblProductivityItem" Content="Productivity Item" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16"/>
+                <TextBox x:Name="txtProductivityItem" TabIndex="4" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Height="45" Width="250" Margin="1,2,1,1" TextChanged="TxtProductivityItem_TextChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="416">
-                <Label x:Name="lblEndTime" Content="End Time" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="45" Width="150" FontSize="20"/>
-                <TextBox x:Name="txtEndTime" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="20" Height="45" Width="250" Margin="10,1,1,1"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Label x:Name="lblSelectProductivityItem" Content="Select Item" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+                <ComboBox x:Name="cboSelectProductivityItem" TabIndex="6" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="45" Width="250" SelectionChanged="CboSelectProductivityItem_SelectionChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="150" Width="416">
-                <Label x:Name="lblProjectNotes" Content="Employee Note" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="50" Width="150" FontSize="20"/>
-                <TextBox x:Name="txtProjectNotes" TabIndex="5" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="20" Height="145" Width="250" TextWrapping="Wrap" Margin="10,1,1,1"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="75" Width="416">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
                 <Button x:Name="btnProcess" TabIndex="6" Content="Proces" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" FontSize="20" Margin="160,1,1,1" Click="BtnProcess_Click" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
+                <Button x:Name="btnMyProductivity" TabIndex="6" Content="My Productivity" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" FontSize="20" Margin="160,1,1,1" Click="BtnMyProductivity_Click" />
             </StackPanel>
         </StackPanel>
 

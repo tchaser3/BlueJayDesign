@@ -137,31 +137,39 @@
             <Label x:Name="lblContractorTechPay" Content="Contractor Techpay" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="22" Height="45" Width="832" Margin="1,2,1,1"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="155,530,421,39" >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
-                <Label x:Name="lblContractorDate" Content="Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="35" Width="150"/>
-                <TextBox x:Name="txtContractorDate" TabIndex="8" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
-            </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416" >
                 <Label x:Name="lblContractorEnterTechPayItem" Content="Enter Techpay Item" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150" Height="35"/>
-                <ComboBox x:Name="cboContractorTechPayItem" TabIndex="9" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250"/>
+                <TextBox x:Name="txtContractorTechPayItem" CharacterCasing="Upper" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="250" Height="35" FontSize="16" TextChanged="TxtContractorTechPayItem_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="416" Height="40">
+                <Label x:Name="lblContractorSelectTechPayItem" Content="Select Techpay Item" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+                <ComboBox x:Name="cboContractorTechPayItem" TabIndex="9" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1" SelectionChanged="CboContractorTechPayItem_SelectionChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
-                <Label x:Name="lblContractorTechPayPrice" Content="Techpay Price" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
+                <Label x:Name="lblContractorTechPayPrice" Content="Techpay Price" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Height="35" Width="150" FontSize="16"/>
                 <TextBox x:Name="txtContractorTechPayPrice" IsReadOnly="True" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" Height="35" Width="250" FontSize="16"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
                 <Label x:Name="lblContractorQuantity" Content="Quantity" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="35" Width="150"/>
-                <TextBox x:Name="txtContractorQuantity" TabIndex="10" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtContractorQuantity" TabIndex="10" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" />
             </StackPanel>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="574,530,2,39" >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="416">
-                <Button x:Name="btnContractorAttachTechPaySheet"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="11" FontSize="18" Margin="155,2,1,1" Click="BtnContractorAttachTechPaySheet_Click">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="416" Height="40">
+                <Label x:Name="lblContractorLastName" Content="Contractor Last Name" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="175" FontSize="16"/>
+                <TextBox x:Name="txtContractorLastName" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="225" Height="35" FontSize="16" Margin="1,2,1,1" TextChanged="TxtContractorLastName_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="40" Width="416">
+                <Label x:Name="lblSelectContractor" Content="Select Contractor" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="175" FontSize="16"/>
+                <ComboBox x:Name="cboSelectContractor" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" IsReadOnly="True" Width="225" Height="35" Margin="1,2,1,1" SelectionChanged="CboSelectContractor_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="416">
+                <Button x:Name="btnContractorAttachTechPaySheet"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="50" Width="150" TabIndex="11" FontSize="18" Margin="175,2,1,1" Click="BtnContractorAttachTechPaySheet_Click">
                     <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
                 </Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="75" Width="416">
-                <Button x:Name="btnContratorProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="12" FontSize="18" Content="Process" Margin="155,2,1,1"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="416">
+                <Button x:Name="btnContratorProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="50" Width="150" TabIndex="12" FontSize="18" Content="Process" Margin="175,2,1,1" Click="BtnContratorProcess_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>

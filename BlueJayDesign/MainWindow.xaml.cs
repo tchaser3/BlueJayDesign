@@ -65,6 +65,7 @@ namespace BlueJayDesign
         int gintNumberOfAssignedTasks;
         public static int gintAssignedTaskID;
         public static int gintJobTypeID;
+        public static int gintWorkTaskID;
 
         //Setting Windows
         public static SendEmail SendEmailWindow = new SendEmail();
