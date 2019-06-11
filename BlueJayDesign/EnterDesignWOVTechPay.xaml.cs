@@ -399,6 +399,12 @@ namespace BlueJayDesign
                     decTotalHours = 0;
                 }
 
+                if(decTotalHours < 0)
+                {
+                    TheMessagesClass.ErrorMessage("You Cannot Have Negative Hours");
+                    return;
+                }
+
                 decTechPayPrice = Convert.ToDecimal(txtTechPayPrice.Text);
                 decTotalTechPayPrice = decTechPayPrice * intQuantity;
 

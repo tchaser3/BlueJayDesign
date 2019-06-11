@@ -89,7 +89,7 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="325" Width="416" Margin="150,170,426,274">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
                 <Label x:Name="lblEnterDate" Content="Enter Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
-                <TextBox x:Name="txtEnterDate" TabIndex="0" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="45" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtEnterDate" TabIndex="0" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="45" Margin="1,2,1,1" TextChanged="TxtEnterDate_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
                 <Label x:Name="lblStartTime" Content="Start Time" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
@@ -101,7 +101,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="60" Width="416">
                 <Label x:Name="lblProjectID" Content="Project ID" HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16"/>
-                <TextBox x:Name="txtProjectID" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Height="45" Width="250" Margin="1,2,1,1"/>
+                <TextBox x:Name="txtProjectID" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Height="45" Width="250" Margin="1,2,1,1" TextChanged="TxtProjectID_TextChanged"/>
             </StackPanel>
             
         </StackPanel>

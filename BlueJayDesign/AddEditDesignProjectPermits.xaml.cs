@@ -139,6 +139,7 @@ namespace BlueJayDesign
             bool blnThereIsAProblem = false;
             string strErrorMessage = "";
             DateTime datTransactionDate = DateTime.Now;
+            decimal decPermitCost = 0;
 
             try
             {
@@ -170,6 +171,17 @@ namespace BlueJayDesign
                 {
                     gstrPermitNotes += strPermitNotes;
                 }
+                strValueForValidation = txtPermitCost.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyDoubleData(strValueForValidation);
+                if(blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Permit Cost Is Not Numeric\n";
+                }
+                else
+                {
+                    decPermitCost = Convert.ToDecimal(strValueForValidation);
+                }
                 if(blnFatalError == true)
                 {
                     TheMessagesClass.ErrorMessage(strErrorMessage);
@@ -190,6 +202,14 @@ namespace BlueJayDesign
                     if(gstrPermitStatus == "CLOSED")
                     {
                         blnFatalError = TheDesignPermitsClass.CloseDesignPermit(gintTransactionID, DateTime.Now, gstrPermitNotes);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+
+                        blnFatalError = TheDesignPermitsClass.UpdateDesignProjectPermitCost(gintTransactionID, decPermitCost);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
                     }
                     else
                     {

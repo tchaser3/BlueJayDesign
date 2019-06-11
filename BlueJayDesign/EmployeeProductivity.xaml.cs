@@ -254,6 +254,12 @@ namespace BlueJayDesign
                     decTotalHours = ComputeTotalHours(strStartTime, strEndTime);
                 }
 
+                if(decTotalHours < 0)
+                {
+                    TheMessagesClass.ErrorMessage("You Cannot Have Negative Hours");
+                    return;
+                }
+
                 datTransactionDate = TheDateSearchClass.RemoveTime(datTransactionDate);
                 datTomorrow = datTransactionDate;
 
@@ -396,6 +402,16 @@ namespace BlueJayDesign
             {
                 MainWindow.gintWorkTaskID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
             }
+        }
+
+        private void TxtProjectID_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursEntered = false;
+        }
+
+        private void TxtEnterDate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursEntered = false;
         }
     }
 }
