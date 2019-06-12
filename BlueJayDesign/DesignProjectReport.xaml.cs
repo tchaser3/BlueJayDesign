@@ -168,6 +168,7 @@ namespace BlueJayDesign
             cboSelectReportType.Items.Add("Select Report Type");
             cboSelectReportType.Items.Add("Date Search Report");
             cboSelectReportType.Items.Add("Location Report");
+            cboSelectReportType.Items.Add("Detailed Location Report");
             cboSelectReportType.SelectedIndex = 0;
 
             cboSelectLocation.Items.Clear();
@@ -225,6 +226,11 @@ namespace BlueJayDesign
                     txtStartDate.IsEnabled = true;
                     btnSearch.IsEnabled = true;
                     cboSelectLocation.IsEnabled = true;
+                }
+                if(intSelectedIndex == 3)
+                {
+                    DetailedDesignReport DetailedDesignReport = new DetailedDesignReport();
+                    DetailedDesignReport.ShowDialog();
                 }
             }
             catch (Exception Ex)

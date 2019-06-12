@@ -157,6 +157,14 @@
     <Compile Include="DesignProjectReport.xaml.cs">
       <DependentUpon>DesignProjectReport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DetailedDesignReport.xaml.cs">
+      <DependentUpon>DetailedDesignReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DetailedProjectDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DetailedProjectDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="EmployeeEmailDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -248,6 +256,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DesignProjectReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DetailedDesignReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -389,6 +401,17 @@
     </None>
     <None Include="DesignProjectLocationsDataSet.xss">
       <DependentUpon>DesignProjectLocationsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DetailedProjectDataSet.xsc">
+      <DependentUpon>DetailedProjectDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DetailedProjectDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DetailedProjectDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DetailedProjectDataSet.xss">
+      <DependentUpon>DetailedProjectDataSet.xsd</DependentUpon>
     </None>
     <None Include="EmployeeEmailDataSet.xsc">
       <DependentUpon>EmployeeEmailDataSet.xsd</DependentUpon>
