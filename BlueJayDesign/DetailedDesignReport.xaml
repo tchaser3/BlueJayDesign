@@ -6,7 +6,7 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:BlueJayDesign"
         mc:Ignorable="d"
-        Title="DetailedDesignReport" Height="600" Width="800" Loaded="Window_Loaded">
+        Title="DetailedDesignReport" Height="800" Width="1000" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#358AB1" />
@@ -63,26 +63,28 @@
         </Grid>
         <StackPanel x:Name="spaSideMenu" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="150" Height="675" Margin="0,84,0,10">
             <Label x:Name="lblDataEntry" Content="Report Menu" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="150" FontSize="16" />
+            <Button x:Name="btnImportPoleReport" Content="Import Pole Report" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" FontSize="16" Click="BtnImportPoleReport_Click"/>
+            <Button x:Name="btnProcessImport" Content="Process Import" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" FontSize="16" Click="BtnProcessImport_Click"/>
             <Button x:Name="btnGenerateReport" Content="Generate Report" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="55" Click="BtnGenerateReport_Click" />
             <Button x:Name="btnExportToExcel" Content="Export To Excel" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="150" FontSize="16" Height="55" Click="BtnExportToExcel_Click"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="625" Margin="157,84,10,450">
-            <Label x:Name="lblTitle" Content="Location Detailed Design Report" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Width="625"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="832" Margin="155,118,5,611">
+            <Label x:Name="lblTitle" Content="Location Detailed Design Report" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Width="832"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="625" Margin="157,126,10,403">
-            <Label x:Name="lblSelectLocation" Content="Select Location"  HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="125" Margin="135,1,1,1"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="832" Margin="155,163,5,566">
+            <Label x:Name="lblSelectLocation" Content="Select Location"  HorizontalAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="125" Margin="225,1,1,1"/>
             <ComboBox x:Name="cboSelectLocation" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="250" Height="35" SelectionChanged="CboSelectLocation_SelectionChanged"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="312" Margin="155,171,325,358" >
-            <Label x:Name="lblStartDate" Content="Start Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="100"/>
-            <TextBox x:Name="txtStartDate" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="175" Margin="1,2,1,1"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416" Margin="153,205,423,524" >
+            <Label x:Name="lblStartDate" Content="Start Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+            <TextBox x:Name="txtStartDate" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="312" Margin="467,171,13,358" >
-            <Label x:Name="lblEndDate" Content="End Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="100"/>
-            <TextBox x:Name="txtEndDate" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="175" Margin="1,2,1,1"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416" Margin="570,205,6,524" >
+            <Label x:Name="lblEndDate" Content="End Date" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150"/>
+            <TextBox x:Name="txtEndDate" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" Margin="1,2,1,1"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="626" Height="343" Margin="157,216,9,10">
-            <DataGrid x:Name="dgrResults" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="625" Height="340" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="832" Height="506" Margin="154,253,6,10">
+            <DataGrid x:Name="dgrResults" IsReadOnly="True" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="830" Height="505" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue" Margin="1,0"/>
         </StackPanel>
     </Grid>
 </Window>

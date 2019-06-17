@@ -182,6 +182,14 @@
     <Compile Include="FindWOV.xaml.cs">
       <DependentUpon>FindWOV.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImportedPoleReportDataSet.cs">
+      <DependentUpon>ImportedPoleReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ImportedPoleReportDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportedPoleReportDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="MyProductivity.xaml.cs">
       <DependentUpon>MyProductivity.xaml</DependentUpon>
     </Compile>
@@ -423,6 +431,17 @@
     </None>
     <None Include="EmployeeEmailDataSet.xss">
       <DependentUpon>EmployeeEmailDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ImportedPoleReportDataSet.xsc">
+      <DependentUpon>ImportedPoleReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ImportedPoleReportDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ImportedPoleReportDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ImportedPoleReportDataSet.xss">
+      <DependentUpon>ImportedPoleReportDataSet.xsd</DependentUpon>
     </None>
     <None Include="OpenProjectsDataSet.xsc">
       <DependentUpon>OpenProjectsDataSet.xsd</DependentUpon>

@@ -22,6 +22,10 @@ using DesignProjectUpdateDLL;
 using NewEventLogDLL;
 using NewEmployeeDLL;
 using Microsoft.Win32;
+using Excel = Microsoft.Office.Interop.Excel;
+using DesignProjectsDLL;
+using ProjectsDLL;
+using DesignPermitsDLL;
 
 namespace BlueJayDesign
 {
@@ -36,9 +40,18 @@ namespace BlueJayDesign
         DesignProjectUpdateClass TheDesignProjectUpdateClass = new DesignProjectUpdateClass();
         EventLogClass TheEventLogClass = new EventLogClass();
         EmployeeClass TheEmployeeClass = new EmployeeClass();
+        DesignProjectsClass TheDesignProjectClass = new DesignProjectsClass();
+        ProjectClass TheProjectClass = new ProjectClass();
+        DesignPermitsClass TheDesignPermitsClass = new DesignPermitsClass();
 
         FindDetailedDesignProjectReportByLocationDataSet TheFindDetailedDesignProjectReportByLocationDataSet = new FindDetailedDesignProjectReportByLocationDataSet();
         DetailedProjectDataSet TheDetailedprojectDataSet = new DetailedProjectDataSet();
+        ImportedPoleReportDataSet TheImportedPoleReportDataSet = new ImportedPoleReportDataSet();
+        FindProjectByAssignedProjectIDDataSet TheFindProjectByAssignedProjectIDDataSet = new FindProjectByAssignedProjectIDDataSet();
+        FindDesignProjectsByAssignedProjectIDDataSet TheFindDesignProjectByAssignedProjectIdDataSet = new FindDesignProjectsByAssignedProjectIDDataSet();
+        findAllOpenDesignPermitImportsDataSet TheFindAllOpenDesignPermitImportsDataSet = new findAllOpenDesignPermitImportsDataSet();
+        FindDesignPermitImportByAssignedProjectIDDataSet TheFindDesignPermitImportByAssignedProjectIDDataSet = new FindDesignPermitImportByAssignedProjectIDDataSet();
+        FindDesignPermitImportByTransactionDateDataSet ThefindDesignPermitImportByTransactionDateDataSet = new FindDesignPermitImportByTransactionDateDataSet();
 
         //setting up variables
         int gintCounter;
@@ -220,7 +233,7 @@ namespace BlueJayDesign
             Microsoft.Office.Interop.Excel._Application excel = new Microsoft.Office.Interop.Excel.Application();
             Microsoft.Office.Interop.Excel._Workbook workbook = excel.Workbooks.Add(Type.Missing);
             Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
-
+            
             try
             {
 
@@ -279,6 +292,270 @@ namespace BlueJayDesign
                 workbook = null;
                 excel = null;
             }
+        }
+
+        private void BtnImportPoleReport_Click(object sender, RoutedEventArgs e)
+        {
+            Excel.Application xlDropOrder;
+            Excel.Workbook xlDropBook;
+            Excel.Worksheet xlDropSheet;
+            Excel.Range range;
+
+            int intCounter;
+            int intNumberOfRecords;
+            int intColumnRange;
+            int intProjectID;
+            string strCarlID;
+            string strSurveyType;
+            string strJobName;
+            string strFieldEngineer;
+            string strConstSupervisor;
+            string strPermitType;
+            string strValueForValidation;
+            bool blnFatalError = false;
+            DateTime datIssueDate = DateTime.Now;
+            string strPErmitAgency;
+            DateTime datTransactionDate = DateTime.Now;
+            DateTime datPermitSubmitted;
+            DateTime datPermitApproved;
+            string strPermitNumber;
+            DateTime datPermitExpiration;
+            DateTime datActivatedDate;
+            DateTime datPermitClosed;
+            string strPermitComment;
+            int intRecordsReturned;
+            bool blnNotInProjectTable;
+            bool blnNotInDesignTable;
+            int intTimeCounter;
+            
+            try
+            {
+                TheImportedPoleReportDataSet.importedpolereport.Rows.Clear();
+
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.FileName = "Document"; // Default file name
+                dlg.DefaultExt = ".xlsx"; // Default file extension
+                dlg.Filter = "Excel (.xlsx)|*.xlsx"; // Filter files by extension
+
+                // Show open file dialog box
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process open file dialog box results
+                if (result == true)
+                {
+                    // Open document
+                    string filename = dlg.FileName;
+                }
+
+                PleaseWait PleaseWait = new PleaseWait();
+                PleaseWait.Show();
+
+                xlDropOrder = new Excel.Application();
+                xlDropBook = xlDropOrder.Workbooks.Open(dlg.FileName, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                xlDropSheet = (Excel.Worksheet)xlDropOrder.Worksheets.get_Item(1);
+
+                range = xlDropSheet.UsedRange;
+                intNumberOfRecords = range.Rows.Count + 1;
+                intColumnRange = range.Columns.Count;
+
+                for (intCounter = 2; intCounter < intNumberOfRecords; intCounter++)
+                {
+                    datTransactionDate = datTransactionDate.AddSeconds(1);
+
+                    blnNotInDesignTable = false;
+                    blnNotInProjectTable = false;
+                    strCarlID = Convert.ToString((range.Cells[intCounter, 1] as Excel.Range).Value2);
+
+                    TheFindProjectByAssignedProjectIDDataSet = TheProjectClass.FindProjectByAssignedProjectID(strCarlID);
+
+                    intRecordsReturned = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID.Rows.Count;
+
+                    if(intRecordsReturned < 1)
+                    {
+                        blnNotInProjectTable = true;
+                        intProjectID = -1;
+                    }
+                    else
+                    {
+                        blnNotInProjectTable = false;
+                        intProjectID = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID[0].ProjectID;
+                    }
+
+                    TheFindDesignProjectByAssignedProjectIdDataSet = TheDesignProjectClass.FindDesignProjectsByAssignedProjectID(strCarlID);
+
+                    intRecordsReturned = TheFindDesignProjectByAssignedProjectIdDataSet.FindDesignProjectsByAssignedProjectID.Rows.Count;
+
+                    if(intRecordsReturned < 1)
+                    {
+                        blnNotInDesignTable = true;
+                    }
+                    else
+                    {
+                        blnNotInDesignTable = false;
+                    }
+                   
+                    strSurveyType = Convert.ToString((range.Cells[intCounter, 2] as Excel.Range).Value2);
+                    strJobName = Convert.ToString((range.Cells[intCounter, 3] as Excel.Range).Value2);
+                    strFieldEngineer = Convert.ToString((range.Cells[intCounter, 4] as Excel.Range).Value2);
+                    strConstSupervisor = Convert.ToString((range.Cells[intCounter, 5] as Excel.Range).Value2);
+                    strPermitType = Convert.ToString((range.Cells[intCounter, 6] as Excel.Range).Value2);
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 7] as Excel.Range).Value2);
+                    
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+                    if(blnFatalError == true)
+                    {
+                        throw new Exception();
+                    }
+
+                    datIssueDate = Convert.ToDateTime(strValueForValidation);
+
+                    strPErmitAgency = Convert.ToString((range.Cells[intCounter, 10] as Excel.Range).Value2);
+
+                    ImportedPoleReportDataSet.importedpolereportRow NewProjectRow = TheImportedPoleReportDataSet.importedpolereport.NewimportedpolereportRow();
+
+                    NewProjectRow.CarlID = strCarlID.ToUpper();
+                    NewProjectRow.ProjectID = intProjectID;
+                    NewProjectRow.InNotProjectTable = blnNotInProjectTable;
+                    NewProjectRow.InNotDesignTable = blnNotInDesignTable;
+                    NewProjectRow.SurveyType = strSurveyType.ToUpper();
+                    NewProjectRow.TransactionDate = datTransactionDate;
+                    NewProjectRow.JobName = strJobName.ToUpper();
+                    NewProjectRow.FieldEngineer = strFieldEngineer.ToUpper();
+                    NewProjectRow.ConstSupervisor = strConstSupervisor.ToUpper();
+                    NewProjectRow.PermitAgency = strPErmitAgency.ToUpper();
+                    NewProjectRow.IssuedDate = datIssueDate;
+                    NewProjectRow.PermitType = strPermitType.ToUpper();
+
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 11] as Excel.Range).Value2);
+
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+
+                    if(blnFatalError == true)
+                    {
+                        blnFatalError = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                        if(blnFatalError == false)
+                        {
+                            datPermitSubmitted = DateTime.FromOADate(Convert.ToDouble(strValueForValidation));
+                            NewProjectRow.PermitSubmitted = datPermitSubmitted;
+                        }
+                    }
+                    else
+                    {
+                        datPermitSubmitted = Convert.ToDateTime(strValueForValidation);
+                        NewProjectRow.PermitSubmitted = datPermitSubmitted;
+                    }
+
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 12] as Excel.Range).Value2);
+
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+
+                    if (blnFatalError == true)
+                    {
+                        blnFatalError = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                        if (blnFatalError == false)
+                        {
+                            datPermitApproved = DateTime.FromOADate(Convert.ToDouble(strValueForValidation));
+                            NewProjectRow.PermitApproved = datPermitApproved;
+                        }
+                    }
+                    else
+                    {
+                        datPermitApproved = Convert.ToDateTime(strValueForValidation);
+                        NewProjectRow.PermitApproved = datPermitApproved;
+                    }
+
+                    strPermitNumber = Convert.ToString((range.Cells[intCounter, 13] as Excel.Range).Value2);
+
+                    if (strPermitNumber != null)
+                    {
+                        NewProjectRow.PermitNumber = strPermitNumber.ToUpper();
+                    }
+
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 14] as Excel.Range).Value2);
+
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+
+                    if (blnFatalError == true)
+                    {
+                        blnFatalError = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                        if (blnFatalError == false)
+                        {
+                            datPermitExpiration = DateTime.FromOADate(Convert.ToDouble(strValueForValidation));
+                            NewProjectRow.PermitExpiration = datPermitExpiration;
+                        }
+                    }
+                    else
+                    {
+                        datPermitExpiration = Convert.ToDateTime(strValueForValidation);
+                        NewProjectRow.PermitExpiration = datPermitExpiration;
+                    }
+
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 15] as Excel.Range).Value2);
+
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+
+                    if (blnFatalError == true)
+                    {
+                        blnFatalError = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                        if (blnFatalError == false)
+                        {
+                            datActivatedDate = DateTime.FromOADate(Convert.ToDouble(strValueForValidation));
+                            NewProjectRow.ActivatedDate = datActivatedDate;
+                        }
+                    }
+                    else
+                    {
+                        datActivatedDate = Convert.ToDateTime(strValueForValidation);
+                        NewProjectRow.ActivatedDate = datActivatedDate;
+                    }
+
+                    strValueForValidation = Convert.ToString((range.Cells[intCounter, 16] as Excel.Range).Value2);
+
+                    blnFatalError = TheDataValidationClass.VerifyDateData(strValueForValidation);
+
+                    if (blnFatalError == true)
+                    {
+                        blnFatalError = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                        if (blnFatalError == false)
+                        {
+                            datPermitClosed= DateTime.FromOADate(Convert.ToDouble(strValueForValidation));
+                            NewProjectRow.PermitClosed = datPermitClosed;
+                        }
+                    }
+                    else
+                    {
+                        datPermitClosed = Convert.ToDateTime(strValueForValidation);
+                        NewProjectRow.PermitClosed = datPermitClosed;
+                    }
+
+                    strPermitComment = Convert.ToString((range.Cells[intCounter, 17] as Excel.Range).Value2);
+
+                    if (strPermitComment != null)
+                    {
+                        NewProjectRow.PermitComment = strPermitComment.ToUpper();
+                    }
+
+                    TheImportedPoleReportDataSet.importedpolereport.Rows.Add(NewProjectRow);
+                }                
+
+                PleaseWait.Close();
+                dgrResults.ItemsSource = TheImportedPoleReportDataSet.importedpolereport;
+                txtEndDate.IsEnabled = false;
+                txtStartDate.IsEnabled = false;
+                btnExportToExcel.IsEnabled = false;
+                btnGenerateReport.IsEnabled = false;                
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Detailed Design Report // Import Excel Button " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void BtnProcessImport_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ImportedPoleReportDataSet" targetNamespace="http://tempuri.org/ImportedPoleReportDataSet.xsd" xmlns:mstns="http://tempuri.org/ImportedPoleReportDataSet.xsd" xmlns="http://tempuri.org/ImportedPoleReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ImportedPoleReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ImportedPoleReportDataSet" msprop:Generator_UserDSName="ImportedPoleReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="importedpolereport" msprop:Generator_TableClassName="importedpolereportDataTable" msprop:Generator_TableVarName="tableimportedpolereport" msprop:Generator_TablePropName="importedpolereport" msprop:Generator_RowDeletingName="importedpolereportRowDeleting" msprop:Generator_RowChangingName="importedpolereportRowChanging" msprop:Generator_RowEvHandlerName="importedpolereportRowChangeEventHandler" msprop:Generator_RowDeletedName="importedpolereportRowDeleted" msprop:Generator_UserTableName="importedpolereport" msprop:Generator_RowChangedName="importedpolereportRowChanged" msprop:Generator_RowEvArgName="importedpolereportRowChangeEvent" msprop:Generator_RowClassName="importedpolereportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TransactionID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnTransactionID" msprop:Generator_ColumnPropNameInRow="TransactionID" msprop:Generator_ColumnPropNameInTable="TransactionIDColumn" msprop:Generator_UserColumnName="TransactionID" type="xs:int" />
+              <xs:element name="ProjectID" msprop:Generator_ColumnVarNameInTable="columnProjectID" msprop:Generator_ColumnPropNameInRow="ProjectID" msprop:Generator_ColumnPropNameInTable="ProjectIDColumn" msprop:Generator_UserColumnName="ProjectID" type="xs:int" />
+              <xs:element name="InNotProjectTable" msprop:Generator_ColumnVarNameInTable="columnInNotProjectTable" msprop:Generator_ColumnPropNameInRow="InNotProjectTable" msprop:Generator_ColumnPropNameInTable="InNotProjectTableColumn" msprop:Generator_UserColumnName="InNotProjectTable" type="xs:boolean" />
+              <xs:element name="InNotDesignTable" msprop:Generator_ColumnVarNameInTable="columnInNotDesignTable" msprop:Generator_ColumnPropNameInRow="InNotDesignTable" msprop:Generator_ColumnPropNameInTable="InNotDesignTableColumn" msprop:Generator_UserColumnName="InNotDesignTable" type="xs:boolean" />
+              <xs:element name="CarlID" msprop:Generator_ColumnVarNameInTable="columnCarlID" msprop:Generator_ColumnPropNameInRow="CarlID" msprop:Generator_ColumnPropNameInTable="CarlIDColumn" msprop:Generator_UserColumnName="CarlID" type="xs:string" />
+              <xs:element name="SurveyType" msprop:Generator_ColumnVarNameInTable="columnSurveyType" msprop:Generator_ColumnPropNameInRow="SurveyType" msprop:Generator_ColumnPropNameInTable="SurveyTypeColumn" msprop:Generator_UserColumnName="SurveyType" type="xs:string" />
+              <xs:element name="JobName" msprop:Generator_ColumnVarNameInTable="columnJobName" msprop:Generator_ColumnPropNameInRow="JobName" msprop:Generator_ColumnPropNameInTable="JobNameColumn" msprop:Generator_UserColumnName="JobName" type="xs:string" />
+              <xs:element name="FieldEngineer" msprop:Generator_ColumnVarNameInTable="columnFieldEngineer" msprop:Generator_ColumnPropNameInRow="FieldEngineer" msprop:Generator_ColumnPropNameInTable="FieldEngineerColumn" msprop:Generator_UserColumnName="FieldEngineer" type="xs:string" />
+              <xs:element name="ConstSupervisor" msprop:Generator_ColumnVarNameInTable="columnConstSupervisor" msprop:Generator_ColumnPropNameInRow="ConstSupervisor" msprop:Generator_ColumnPropNameInTable="ConstSupervisorColumn" msprop:Generator_UserColumnName="ConstSupervisor" type="xs:string" />
+              <xs:element name="PermitType" msprop:Generator_ColumnVarNameInTable="columnPermitType" msprop:Generator_ColumnPropNameInRow="PermitType" msprop:Generator_ColumnPropNameInTable="PermitTypeColumn" msprop:Generator_UserColumnName="PermitType" type="xs:string" />
+              <xs:element name="IssuedDate" msprop:Generator_ColumnVarNameInTable="columnIssuedDate" msprop:Generator_ColumnPropNameInRow="IssuedDate" msprop:Generator_ColumnPropNameInTable="IssuedDateColumn" msprop:Generator_UserColumnName="IssuedDate" type="xs:dateTime" />
+              <xs:element name="PermitAgency" msprop:Generator_ColumnVarNameInTable="columnPermitAgency" msprop:Generator_ColumnPropNameInRow="PermitAgency" msprop:Generator_ColumnPropNameInTable="PermitAgencyColumn" msprop:Generator_UserColumnName="PermitAgency" type="xs:string" />
+              <xs:element name="PermitSubmitted" msprop:Generator_ColumnVarNameInTable="columnPermitSubmitted" msprop:Generator_ColumnPropNameInRow="PermitSubmitted" msprop:Generator_ColumnPropNameInTable="PermitSubmittedColumn" msprop:Generator_UserColumnName="PermitSubmitted" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="PermitApproved" msprop:Generator_ColumnVarNameInTable="columnPermitApproved" msprop:Generator_ColumnPropNameInRow="PermitApproved" msprop:Generator_ColumnPropNameInTable="PermitApprovedColumn" msprop:Generator_UserColumnName="PermitApproved" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="PermitNumber" msprop:Generator_ColumnVarNameInTable="columnPermitNumber" msprop:Generator_ColumnPropNameInRow="PermitNumber" msprop:Generator_ColumnPropNameInTable="PermitNumberColumn" msprop:Generator_UserColumnName="PermitNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="PermitExpiration" msprop:Generator_ColumnVarNameInTable="columnPermitExpiration" msprop:Generator_ColumnPropNameInRow="PermitExpiration" msprop:Generator_ColumnPropNameInTable="PermitExpirationColumn" msprop:Generator_UserColumnName="PermitExpiration" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ActivatedDate" msprop:Generator_ColumnVarNameInTable="columnActivatedDate" msprop:Generator_ColumnPropNameInRow="ActivatedDate" msprop:Generator_ColumnPropNameInTable="ActivatedDateColumn" msprop:Generator_UserColumnName="ActivatedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="PermitClosed" msprop:Generator_ColumnVarNameInTable="columnPermitClosed" msprop:Generator_ColumnPropNameInRow="PermitClosed" msprop:Generator_ColumnPropNameInTable="PermitClosedColumn" msprop:Generator_UserColumnName="PermitClosed" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="PermitComment" msprop:Generator_ColumnVarNameInTable="columnPermitComment" msprop:Generator_ColumnPropNameInRow="PermitComment" msprop:Generator_ColumnPropNameInTable="PermitCommentColumn" msprop:Generator_UserColumnName="PermitComment" type="xs:string" minOccurs="0" />
+              <xs:element name="TransactionDate" msprop:Generator_ColumnVarNameInTable="columnTransactionDate" msprop:Generator_ColumnPropNameInRow="TransactionDate" msprop:Generator_ColumnPropNameInTable="TransactionDateColumn" msprop:Generator_UserColumnName="TransactionDate" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:importedpolereport" />
+      <xs:field xpath="mstns:TransactionID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
