@@ -52,6 +52,7 @@ namespace BlueJayDesign
         findAllOpenDesignPermitImportsDataSet TheFindAllOpenDesignPermitImportsDataSet = new findAllOpenDesignPermitImportsDataSet();
         FindDesignPermitImportByAssignedProjectIDDataSet TheFindDesignPermitImportByAssignedProjectIDDataSet = new FindDesignPermitImportByAssignedProjectIDDataSet();
         FindDesignPermitImportByTransactionDateDataSet ThefindDesignPermitImportByTransactionDateDataSet = new FindDesignPermitImportByTransactionDateDataSet();
+        FindDesignProjectUpdatesByProjectIDDataSet TheFindDesignProjectUpdatesByProjectIDDataSet = new FindDesignProjectUpdatesByProjectIDDataSet();
 
         //setting up variables
         int gintCounter;
@@ -530,10 +531,28 @@ namespace BlueJayDesign
 
                     strPermitComment = Convert.ToString((range.Cells[intCounter, 17] as Excel.Range).Value2);
 
-                    if (strPermitComment != null)
+                    if(blnNotInDesignTable == false)
                     {
-                        NewProjectRow.PermitComment = strPermitComment.ToUpper();
+                        if(strPermitComment == null)
+                        {
+                            strPermitComment = "";
+                            strPermitComment = FindPermitUpdates(intProjectID, strPermitComment);
+                        }
+                        else
+                        {
+                            strPermitComment = FindPermitUpdates(intProjectID, strPermitComment);
+                        }
                     }
+                    else if(strPermitComment != null)
+                    {
+                        strPermitComment = FindPermitUpdates(intProjectID, strPermitComment);
+                    }
+                    else if(strPermitComment == null)
+                    {
+                        strPermitComment = "";
+                    }
+
+                    NewProjectRow.PermitComment = strPermitComment.ToUpper();
 
                     TheImportedPoleReportDataSet.importedpolereport.Rows.Add(NewProjectRow);
                 }                
@@ -552,10 +571,117 @@ namespace BlueJayDesign
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
         }
+        private string FindPermitUpdates(int intProjectID, string strPermitComments)
+        {
+            string strUpdates = "";
+            int intCounter;
+            int intNumberOfRecords;
 
+            strUpdates = strPermitComments + "\n";
+
+            TheFindDesignProjectUpdatesByProjectIDDataSet = TheDesignProjectUpdateClass.FindDesignProjectUpdatesByProjectID(intProjectID);
+
+            intNumberOfRecords = TheFindDesignProjectUpdatesByProjectIDDataSet.FindDesignProjectUpdatesByProjectID.Rows.Count - 1;
+
+            if(intNumberOfRecords > -1)
+            {
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strUpdates += TheFindDesignProjectUpdatesByProjectIDDataSet.FindDesignProjectUpdatesByProjectID[intCounter].ProjectUpdate + "\n";
+                }
+            }
+
+            return strUpdates;
+        }
         private void BtnProcessImport_Click(object sender, RoutedEventArgs e)
         {
+            int intCounter;
+            int intNumberOfRecords;
+            bool blnNotInProjectTable;
+            bool blnNotInDesignTable;
+            int intProjectID;
+            bool blnFatalError = false;
+            string strProjectName;
+            DateTime datTransactionDate;
+            string strSurveyType;
+            string strFieldEngineer;
+            string strConstSupervisor;
+            string strPermitType;
+            DateTime datIssueDate;
+            string strPermitAgency;
+            int intSecondCounter;
+            int intSecondNumberOfRecords;
 
+            try
+            {
+                if(cboSelectLocation.SelectedIndex < 1)
+                {
+                    TheMessagesClass.ErrorMessage("The Location Was not Selected");
+                    return;
+                }
+
+                intNumberOfRecords = TheImportedPoleReportDataSet.importedpolereport.Rows.Count - 1;
+
+                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    blnNotInProjectTable = TheImportedPoleReportDataSet.importedpolereport[intCounter].InNotProjectTable;
+                    blnNotInDesignTable = TheImportedPoleReportDataSet.importedpolereport[intCounter].InNotDesignTable;
+                    intProjectID = TheImportedPoleReportDataSet.importedpolereport[intCounter].ProjectID;
+                    MainWindow.gstrAssignedProjectID = TheImportedPoleReportDataSet.importedpolereport[intCounter].CarlID;
+                    strProjectName = TheImportedPoleReportDataSet.importedpolereport[intCounter].JobName;
+                    datTransactionDate = TheImportedPoleReportDataSet.importedpolereport[intCounter].TransactionDate;
+                    strSurveyType = TheImportedPoleReportDataSet.importedpolereport[intCounter].SurveyType;
+                    strFieldEngineer = TheImportedPoleReportDataSet.importedpolereport[intCounter].FieldEngineer;
+                    strConstSupervisor = TheImportedPoleReportDataSet.importedpolereport[intCounter].ConstSupervisor;
+                    strPermitType = TheImportedPoleReportDataSet.importedpolereport[intCounter].PermitType;
+                    datIssueDate = TheImportedPoleReportDataSet.importedpolereport[intCounter].IssuedDate;
+                    strPermitAgency = TheImportedPoleReportDataSet.importedpolereport[intCounter].PermitAgency;
+
+                    if(blnNotInProjectTable == true)
+                    {
+                        //this will load up all of the tables
+                        blnFatalError = TheProjectClass.InsertProject(MainWindow.gstrAssignedProjectID, strProjectName);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+
+                        TheFindProjectByAssignedProjectIDDataSet = TheProjectClass.FindProjectByAssignedProjectID(MainWindow.gstrAssignedProjectID);
+
+                        intProjectID = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID[0].ProjectID;
+
+                        AddDesignProjectItems AddDesignProjectItems = new AddDesignProjectItems();
+                        AddDesignProjectItems.ShowDialog();
+
+                    }
+                    else if(blnNotInDesignTable == false)
+                    {
+                        TheFindProjectByAssignedProjectIDDataSet = TheProjectClass.FindProjectByAssignedProjectID(MainWindow.gstrAssignedProjectID);
+
+                        intProjectID = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID[0].ProjectID;
+
+                        AddDesignProjectItems AddDesignProjectItems = new AddDesignProjectItems();
+                        AddDesignProjectItems.ShowDialog();
+                    }
+
+                    TheFindDesignPermitImportByAssignedProjectIDDataSet = TheDesignPermitsClass.FindDesignPermitImportByAssignedProjectID(MainWindow.gstrAssignedProjectID);
+
+                    intSecondNumberOfRecords = TheFindDesignPermitImportByAssignedProjectIDDataSet.FindDesignPermitImportByAssignedProjectID.Rows.Count - 1;
+
+                    if(intSecondNumberOfRecords < 0)
+                    {
+                        blnFatalError = TheDesignPermitsClass.InsertDesignPermitImport(intProjectID, MainWindow.gstrAssignedProjectID, strSurveyType, strProjectName, strFieldEngineer, strConstSupervisor, strPermitType, datIssueDate, strPermitType, datTransactionDate);
+                        
+                        
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Detailed Design Report // Process Import Button " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
         }
+       
     }
 }

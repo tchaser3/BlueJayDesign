@@ -119,6 +119,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddDesignProjectItems.xaml.cs">
+      <DependentUpon>AddDesignProjectItems.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddEditDesignProjectPermits.xaml.cs">
       <DependentUpon>AddEditDesignProjectPermits.xaml</DependentUpon>
     </Compile>
@@ -243,6 +246,10 @@
       <DependentUpon>ViewProjectInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPFMessagesClass.cs" />
+    <Page Include="AddDesignProjectItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddEditDesignProjectPermits.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

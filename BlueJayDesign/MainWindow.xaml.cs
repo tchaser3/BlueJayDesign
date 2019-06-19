@@ -66,6 +66,10 @@ namespace BlueJayDesign
         public static int gintAssignedTaskID;
         public static int gintJobTypeID;
         public static int gintWorkTaskID;
+        public static string gstrCity;
+        public static int gintJobType;
+        public static string gstrZipCode;
+        public static string gstrState;
 
         //Setting Windows
         public static SendEmail SendEmailWindow = new SendEmail();
