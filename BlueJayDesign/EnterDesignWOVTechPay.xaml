@@ -90,7 +90,7 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="154,175,6,544">
             <Label x:Name="lblFullTimeEmployee" Content="Full Time Employees" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="22" Height="45" Width="832" Margin="1,3,1,1" />
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="152,242,424,327">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="239" Width="416" Margin="152,242,424,288">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416">
                 <Label x:Name="lblDate" Content="Enter Date" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Height="35" Width="150" FontSize="16" Margin="1,2,1,1"/>
                 <TextBox x:Name="txtDate" TabIndex="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" CharacterCasing="Upper" FontSize="16" Width="250" Height="35" Margin="1,2,1,1" />
@@ -113,6 +113,11 @@
                 <Label x:Name="lblSelectTechPayItem" Content="Select Techpay Item" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="35" Width="150" FontSize="16"/>
                 <ComboBox x:Name="cboSelectTechPayItem" IsReadOnly="True" TabIndex="4" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" Width="250" FontSize="16" Margin="1,2,1,1" SelectionChanged="CboSelectTechPayItem_SelectionChanged"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="416" Height="40">
+                <Label x:Name="lblPoleStick" Content="Pole Stick" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="150"/>
+                <RadioButton x:Name="rdoYes" Content="Yes" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Margin="25,1,1,1" Checked="RdoYes_Checked"/>
+                <RadioButton x:Name="rdoNo" Content="No" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Margin="25,1,1,1" Checked="RdoNo_Checked"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="573,242,3,327">
 
@@ -133,10 +138,10 @@
                 <Button x:Name="btnProcess"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="7" FontSize="18" Content="Process" Margin="155,2,1,1" Click="BtnProcess_Click"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,466,8,253">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="832" Margin="152,486,8,233">
             <Label x:Name="lblContractorTechPay" Content="Contractor Techpay" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="22" Height="45" Width="832" Margin="1,2,1,1"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="155,530,421,39" >
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="155,550,421,19" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="416" >
                 <Label x:Name="lblContractorEnterTechPayItem" Content="Enter Techpay Item" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Width="150" Height="35"/>
                 <TextBox x:Name="txtContractorTechPayItem" CharacterCasing="Upper" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="250" Height="35" FontSize="16" TextChanged="TxtContractorTechPayItem_TextChanged"/>
@@ -153,8 +158,13 @@
                 <Label x:Name="lblContractorQuantity" Content="Quantity" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Height="35" Width="150"/>
                 <TextBox x:Name="txtContractorQuantity" TabIndex="10" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="250" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="416" Height="40">
+                <Label x:Name="lblContractorPoleStick" Content="Pole Stick" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Width="150"/>
+                <RadioButton x:Name="rdoContractorYes" Content="Yes" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Margin="25,1,1,1" Checked="RdoContractorYes_Checked" />
+                <RadioButton x:Name="rdoContractorNo" Content="No" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="35" Margin="25,1,1,1" Checked="RdoContractorNo_Checked" />
+            </StackPanel>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="574,530,2,39" >
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Height="200" Width="416" Margin="574,550,2,19" >
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="416" Height="40">
                 <Label x:Name="lblContractorLastName" Content="Contractor Last Name" HorizontalAlignment="Left" HorizontalContentAlignment="Right" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="175" FontSize="16"/>
                 <TextBox x:Name="txtContractorLastName" CharacterCasing="Upper" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="225" Height="35" FontSize="16" Margin="1,2,1,1" TextChanged="TxtContractorLastName_TextChanged"/>

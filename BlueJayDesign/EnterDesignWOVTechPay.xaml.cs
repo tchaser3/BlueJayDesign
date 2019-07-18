@@ -47,12 +47,14 @@ namespace BlueJayDesign
         //setting up the data variables
         FindTechPayItemByDescriptionDataSet TheFindTechPayItemByDescriptionDataSet = new FindTechPayItemByDescriptionDataSet();
         FindProductivityToTechPayByTechPayIDDataSet TheFindProductivityToTechPayByTechPayIDDataSet = new FindProductivityToTechPayByTechPayIDDataSet();
+        FindProjectTechPayItemByDAteTimeDataSet TheFindProjectTechPayItemByDateTimeDataSet = new FindProjectTechPayItemByDAteTimeDataSet();
 
         //setting up global variables
         int gintTechPayID;
         int gintProductivityID;
         bool gblnTechPayAttached;
         bool gblnHoursComputed;
+        bool gblnPoleStick;
 
         public EnterDesignWOVTechPay()
         {
@@ -174,6 +176,8 @@ namespace BlueJayDesign
             gblnTechPayAttached = false;
             gblnHoursComputed = false;
             txtDate.Text = Convert.ToString(DateTime.Now);
+            rdoNo.IsChecked = true;
+            rdoContractorNo.IsChecked = true;
         }
 
         private void TxtEnterTechPayItem_TextChanged(object sender, TextChangedEventArgs e)
@@ -408,12 +412,21 @@ namespace BlueJayDesign
                 decTechPayPrice = Convert.ToDecimal(txtTechPayPrice.Text);
                 decTotalTechPayPrice = decTechPayPrice * intQuantity;
 
-                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice);
+                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice, datTransactionDate);
 
                 if (blnFatalError == true)
                     throw new Exception();
 
                 blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gintProductivityID, decTotalHours, datTransactionDate);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                TheFindProjectTechPayItemByDateTimeDataSet = TheTechPayClass.FindProjectTechPayItemsByDateTime(datTransactionDate);
+
+                MainWindow.gintTransactionID = TheFindProjectTechPayItemByDateTimeDataSet.FindProjectTechPayItemByDateTime[0].TransactionID;
+
+                blnFatalError = TheTechPayClass.UpdateProjectTechPayPoleStick(MainWindow.gintTransactionID, gblnPoleStick);
 
                 if (blnFatalError == true)
                     throw new Exception();
@@ -571,6 +584,7 @@ namespace BlueJayDesign
             int intQuantity = 0;
             decimal decTechPayPrice;
             decimal decTotalTechPayPrice;
+            DateTime datTransactionDate = DateTime.Now;
 
             try
             {
@@ -609,7 +623,16 @@ namespace BlueJayDesign
                 decTechPayPrice = Convert.ToDecimal(txtContractorTechPayPrice.Text);
                 decTotalTechPayPrice = Convert.ToDecimal(intQuantity) * decTechPayPrice;
 
-                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.gintEmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice);
+                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.gintEmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice, datTransactionDate);
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                TheFindProjectTechPayItemByDateTimeDataSet = TheTechPayClass.FindProjectTechPayItemsByDateTime(datTransactionDate);
+
+                MainWindow.gintTransactionID = TheFindProjectTechPayItemByDateTimeDataSet.FindProjectTechPayItemByDateTime[0].TransactionID;
+
+                blnFatalError = TheTechPayClass.UpdateProjectTechPayPoleStick(MainWindow.gintTransactionID, gblnPoleStick);
+
                 if (blnFatalError == true)
                     throw new Exception();
 
@@ -655,6 +678,26 @@ namespace BlueJayDesign
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+
+        private void RdoYes_Checked(object sender, RoutedEventArgs e)
+        {
+            gblnPoleStick = true;
+        }
+
+        private void RdoNo_Checked(object sender, RoutedEventArgs e)
+        {
+            gblnPoleStick = false;
+        }
+
+        private void RdoContractorNo_Checked(object sender, RoutedEventArgs e)
+        {
+            gblnPoleStick = false;
+        }
+
+        private void RdoContractorYes_Checked(object sender, RoutedEventArgs e)
+        {
+            gblnPoleStick = true;
         }
     }
 }

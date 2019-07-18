@@ -611,6 +611,9 @@ namespace BlueJayDesign
             string strPermitAgency;
             int intSecondCounter;
             int intSecondNumberOfRecords;
+            bool blnItemFound;
+            string strPermitComments;
+            string strTablePermitComments;
 
             try
             {
@@ -637,6 +640,15 @@ namespace BlueJayDesign
                     datIssueDate = TheImportedPoleReportDataSet.importedpolereport[intCounter].IssuedDate;
                     strPermitAgency = TheImportedPoleReportDataSet.importedpolereport[intCounter].PermitAgency;
 
+                    if(TheImportedPoleReportDataSet.importedpolereport[intCounter].IsPermitCommentNull() == false)
+                    {
+                        strPermitComments = TheImportedPoleReportDataSet.importedpolereport[intCounter].PermitComment;
+                    }
+                    else
+                    {
+                        strPermitComments = "";
+                    }
+                    
                     if(blnNotInProjectTable == true)
                     {
                         //this will load up all of the tables
@@ -653,14 +665,19 @@ namespace BlueJayDesign
                         AddDesignProjectItems.ShowDialog();
 
                     }
-                    else if(blnNotInDesignTable == false)
+                    else if(blnNotInDesignTable == true)
                     {
                         TheFindProjectByAssignedProjectIDDataSet = TheProjectClass.FindProjectByAssignedProjectID(MainWindow.gstrAssignedProjectID);
 
-                        intProjectID = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID[0].ProjectID;
+                        MainWindow.gintProjectID = TheFindProjectByAssignedProjectIDDataSet.FindProjectByAssignedProjectID[0].ProjectID;
 
                         AddDesignProjectItems AddDesignProjectItems = new AddDesignProjectItems();
                         AddDesignProjectItems.ShowDialog();
+
+                        blnFatalError = TheDesignProjectClass.InsertDesignProject(MainWindow.gintProjectID, MainWindow.gstrAddress, MainWindow.gstrCity, MainWindow.gintWarehouseID, DateTime.Now, MainWindow.gintJobTypeID, strConstSupervisor, strPermitComments, MainWindow.gstrState, MainWindow.gstrZipCode);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
                     }
 
                     TheFindDesignPermitImportByAssignedProjectIDDataSet = TheDesignPermitsClass.FindDesignPermitImportByAssignedProjectID(MainWindow.gstrAssignedProjectID);
@@ -669,9 +686,39 @@ namespace BlueJayDesign
 
                     if(intSecondNumberOfRecords < 0)
                     {
-                        blnFatalError = TheDesignPermitsClass.InsertDesignPermitImport(intProjectID, MainWindow.gstrAssignedProjectID, strSurveyType, strProjectName, strFieldEngineer, strConstSupervisor, strPermitType, datIssueDate, strPermitType, datTransactionDate);
-                        
-                        
+                        blnFatalError = TheDesignPermitsClass.InsertDesignPermitImport(intProjectID, MainWindow.gstrAssignedProjectID, strSurveyType, strProjectName, strFieldEngineer, strConstSupervisor, strPermitType, datIssueDate, strPermitAgency, datTransactionDate, strPermitComments);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+                    }
+                    else if(intSecondNumberOfRecords > -1)
+                    {
+                        blnItemFound = false;
+                        strTablePermitComments = "";
+
+                        for(intSecondCounter = 0; intSecondCounter <= intSecondNumberOfRecords; intSecondCounter++)
+                        {
+                            if(TheFindDesignPermitImportByAssignedProjectIDDataSet.FindDesignPermitImportByAssignedProjectID[intSecondCounter].PermitAgency == TheImportedPoleReportDataSet.importedpolereport[intCounter].PermitAgency)
+                            {
+                                if(TheFindDesignPermitImportByAssignedProjectIDDataSet.FindDesignPermitImportByAssignedProjectID[intSecondCounter].PermitType == TheImportedPoleReportDataSet.importedpolereport[intSecondCounter].PermitType)
+                                {
+                                    blnItemFound = true;
+
+                                    MainWindow.gintTransactionID = TheFindDesignPermitImportByAssignedProjectIDDataSet.FindDesignPermitImportByAssignedProjectID[intSecondCounter].TransactionID;
+                                    strTablePermitComments = TheFindDesignPermitImportByAssignedProjectIDDataSet.FindDesignPermitImportByAssignedProjectID[intSecondCounter].PermitComment;
+                                    strTablePermitComments = strTablePermitComments + "\n" + strPermitComments;
+
+                                }
+                            }
+                        }
+
+                        if(blnItemFound == false)
+                        {
+                            blnFatalError = TheDesignPermitsClass.InsertDesignPermitImport(intProjectID, MainWindow.gstrAssignedProjectID, strSurveyType, strProjectName, strFieldEngineer, strConstSupervisor, strPermitType, datIssueDate, strPermitAgency, datTransactionDate, strPermitComments);
+
+                            if (blnFatalError == true)
+                                throw new Exception();
+                        }
                     }
                 }
             }

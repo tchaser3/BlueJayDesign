@@ -70,6 +70,7 @@ namespace BlueJayDesign
         public static int gintJobType;
         public static string gstrZipCode;
         public static string gstrState;
+        public static string gstrAddress;
 
         //Setting Windows
         public static SendEmail SendEmailWindow = new SendEmail();

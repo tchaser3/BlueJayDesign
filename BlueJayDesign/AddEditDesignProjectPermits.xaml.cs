@@ -22,6 +22,7 @@ using DesignPermitsDLL;
 using DesignProjectDocumentation;
 using DataValidationDLL;
 using DesignProjectUpdateDLL;
+using DesignProjectsDLL;
 
 namespace BlueJayDesign
 {
@@ -37,9 +38,11 @@ namespace BlueJayDesign
         DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
         DesignProjectUpdateClass TheDesignProjectUpdateClass = new DesignProjectUpdateClass();
         DataValidationClass TheDataValidationClass = new DataValidationClass();
+        DesignProjectsClass TheDesignProjectClass = new DesignProjectsClass();
 
         //setting up data
         FindPermitsByProjectIDDataSet TheFindPermitsByProjectIDDataSet = new FindPermitsByProjectIDDataSet();
+        FindDesignPermitImportByAssignedProjectIDDataSet TheFindDesignPermitImportByAssignedProjectIDDataSet = new FindDesignPermitImportByAssignedProjectIDDataSet();
 
         //Setting global Variables
         string gstrPermitStatus;
@@ -88,6 +91,7 @@ namespace BlueJayDesign
                 cboPermitStatus.SelectedIndex = 0;
 
                 TheFindPermitsByProjectIDDataSet = TheDesignPermitsClass.FindPermitsByProjectID(MainWindow.gintProjectID);
+                TheFindDesignPermitImportByAssignedProjectIDDataSet = TheDesignPermitsClass.FindDesignPermitImportByAssignedProjectID(MainWindow.gstrAssignedProjectID);
 
                 intRecordsReturned = TheFindPermitsByProjectIDDataSet.FindPermitsByProjectID.Rows.Count;
 
@@ -140,6 +144,7 @@ namespace BlueJayDesign
             string strErrorMessage = "";
             DateTime datTransactionDate = DateTime.Now;
             decimal decPermitCost = 0;
+            decimal decPermitPrice = 0;
 
             try
             {
@@ -206,7 +211,11 @@ namespace BlueJayDesign
                         if (blnFatalError == true)
                             throw new Exception();
 
-                        blnFatalError = TheDesignPermitsClass.UpdateDesignProjectPermitCost(gintTransactionID, decPermitCost);
+                        decPermitPrice = decPermitCost + (decPermitCost * Convert.ToDecimal(.15));
+
+                        decPermitPrice = Math.Round(decPermitPrice, 2);
+
+                        blnFatalError = TheDesignPermitsClass.UpdateDesignProjectPermitCost(gintTransactionID, decPermitCost, decPermitPrice);
 
                         if (blnFatalError == true)
                             throw new Exception();

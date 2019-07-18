@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using JobTypeDLL;
 
+
 namespace BlueJayDesign
 {
     /// <summary>
@@ -64,6 +65,12 @@ namespace BlueJayDesign
             bool blnFatalError = false;
             string strErrorMessage = "";
 
+            MainWindow.gstrAddress = txtAddress.Text;
+            if(MainWindow.gstrAddress == "")
+            {
+                blnFatalError = true;
+                strErrorMessage += "The Address Was Not Entered\n";
+            }
             MainWindow.gstrCity = txtCity.Text;
             if(MainWindow.gstrCity == "")
             {
