@@ -25,6 +25,7 @@ using DesignProductivityDLL;
 using DesignProjectDocumentation;
 using ProductivityToTechPayDLL;
 using NewEmployeeDLL;
+using WorkTaskDLL;
 
 namespace BlueJayDesign
 {
@@ -43,10 +44,11 @@ namespace BlueJayDesign
         DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
         ProductivityToTechPayClass TheProductivityToTechPayClass = new ProductivityToTechPayClass();
         EmployeeClass TheEmployeeClass = new EmployeeClass();
+        WorkTaskClass TheWorkTaskClass = new WorkTaskClass();
 
         //setting up the data variables
-        FindTechPayItemByDescriptionDataSet TheFindTechPayItemByDescriptionDataSet = new FindTechPayItemByDescriptionDataSet();
-        FindProductivityToTechPayByTechPayIDDataSet TheFindProductivityToTechPayByTechPayIDDataSet = new FindProductivityToTechPayByTechPayIDDataSet();
+        FindWorkTaskByTaskKeywordDataSet TheFindWorkTaskByTaskKeywordDataSet = new FindWorkTaskByTaskKeywordDataSet();
+        FindProductivityToTechPayByProductivityIDDataSet TheFindProductivityToTechPayByProductivityIDDataSet = new FindProductivityToTechPayByProductivityIDDataSet();
         FindProjectTechPayItemByDAteTimeDataSet TheFindProjectTechPayItemByDateTimeDataSet = new FindProjectTechPayItemByDAteTimeDataSet();
 
         //setting up global variables
@@ -55,6 +57,8 @@ namespace BlueJayDesign
         bool gblnTechPayAttached;
         bool gblnHoursComputed;
         bool gblnPoleStick;
+        decimal gdecTotalHours;
+        bool gblnProductivityOnly;
 
         public EnterDesignWOVTechPay()
         {
@@ -175,39 +179,39 @@ namespace BlueJayDesign
         {
             gblnTechPayAttached = false;
             gblnHoursComputed = false;
-            txtDate.Text = Convert.ToString(DateTime.Now);
+            txtDate.Text = "";
             rdoNo.IsChecked = true;
             rdoContractorNo.IsChecked = true;
         }
 
         private void TxtEnterTechPayItem_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string strTechPayItem;
+            string strWorkTask;
             int intLength;
             int intCounter;
             int intNumberOfRecords;
 
             try
             {
-                strTechPayItem = txtEnterTechPayItem.Text;
-                intLength = strTechPayItem.Length;
+                strWorkTask = txtEnterTechPayItem.Text;
+                intLength = strWorkTask.Length;
                 if(intLength > 2)
                 {
                     cboSelectTechPayItem.Items.Clear();
-                    cboSelectTechPayItem.Items.Add("Select Techpay Item");
+                    cboSelectTechPayItem.Items.Add("Select Work Task");
 
-                    TheFindTechPayItemByDescriptionDataSet = TheTechPayClass.FindTechPayItemByDescription(strTechPayItem);
-                    intNumberOfRecords = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription.Rows.Count - 1;
+                    TheFindWorkTaskByTaskKeywordDataSet = TheWorkTaskClass.FindWorkTaskByTaskKeyword(strWorkTask);
+                    intNumberOfRecords = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword.Rows.Count - 1;
 
                     if(intNumberOfRecords < 0)
                     {
-                        TheMessagesClass.ErrorMessage("The Techpay Item Was Not Found");
+                        TheMessagesClass.ErrorMessage("The Work Task Was Not Found");
                         return;
                     }
 
                     for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
                     {
-                        cboSelectTechPayItem.Items.Add(TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intCounter].JobDescription);
+                        cboSelectTechPayItem.Items.Add(TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intCounter].WorkTask);
                     }
 
                     cboSelectTechPayItem.SelectedIndex = 0;
@@ -226,44 +230,33 @@ namespace BlueJayDesign
             int intSelectedIndex;
             decimal decTechPayCost = 0;
             int intRecordsReturned;
+            string strStartTime;
+            string strEndTime;
+            string strTechPayCode;
+            bool blnThereIsAProblem = false;
+            string strErrorMessage = "";
+            bool blnFatalError = false;
 
             try
             {
                 intSelectedIndex = cboSelectTechPayItem.SelectedIndex - 1;
 
-                if(intSelectedIndex > -1)
+                if (intSelectedIndex > -1)
                 {
-                    gintTechPayID = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayID;
-                    decTechPayCost = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayPrice;
+                    gintProductivityID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
 
-                    txtTechPayPrice.Text = Convert.ToString(decTechPayCost);
-                }
+                    TheFindProductivityToTechPayByProductivityIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByProductivityID(gintProductivityID);
 
-                TheFindProductivityToTechPayByTechPayIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByTechPayID(gintTechPayID);
+                    intRecordsReturned = TheFindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID.Rows.Count;
 
-                intRecordsReturned = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID.Rows.Count;
-
-                if(intRecordsReturned > 1)
-                {
-                    const string message = "Did You Do Spans?";
-                    const string caption = "Please Answer";
-                    MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                    if (result == MessageBoxResult.Yes)
+                    if (intRecordsReturned < 1)
                     {
-                        gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[0].ProductivityID;
+                        gblnProductivityOnly = true;
                     }
                     else
                     {
-                        gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[1].ProductivityID;
+                        gintTechPayID = TheFindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID[0].TechPayID;
                     }
-
-                    TheFindProductivityToTechPayByTechPayIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByTechPayID(0);
-                    
-                }
-                else if (intRecordsReturned == 1)
-                {
-                    gintProductivityID = TheFindProductivityToTechPayByTechPayIDDataSet.FindProductivityToTechPayByTechPayID[0].ProductivityID;
                 }
             }
             catch (Exception Ex)
@@ -385,11 +378,6 @@ namespace BlueJayDesign
                 {
                     intQuantity = Convert.ToInt32(strValueForValidation);
                 }
-                if(gblnTechPayAttached == false)
-                {
-                    blnFatalError = true;
-                    strErrorMessage += "The Techpay Sheet was not Attached\n";
-                }
                 if(blnFatalError == true)
                 {
                     TheMessagesClass.ErrorMessage(strErrorMessage);
@@ -409,33 +397,35 @@ namespace BlueJayDesign
                     return;
                 }
 
-                decTechPayPrice = Convert.ToDecimal(txtTechPayPrice.Text);
+                decTechPayPrice = 0;
                 decTotalTechPayPrice = decTechPayPrice * intQuantity;
 
-                blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice, datTransactionDate);
+                if(gblnProductivityOnly == false)
+                {
+                    blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, decTechPayPrice, intQuantity, decTotalTechPayPrice, datTransactionDate);
 
-                if (blnFatalError == true)
-                    throw new Exception();
+                    if (blnFatalError == true)
+                        throw new Exception();
+
+                    TheFindProjectTechPayItemByDateTimeDataSet = TheTechPayClass.FindProjectTechPayItemsByDateTime(datTransactionDate);
+
+                    MainWindow.gintTransactionID = TheFindProjectTechPayItemByDateTimeDataSet.FindProjectTechPayItemByDateTime[0].TransactionID;
+
+                    blnFatalError = TheTechPayClass.UpdateProjectTechPayPoleStick(MainWindow.gintTransactionID, gblnPoleStick);
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }                
 
                 blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gintProductivityID, decTotalHours, datTransactionDate);
 
                 if (blnFatalError == true)
-                    throw new Exception();
-
-                TheFindProjectTechPayItemByDateTimeDataSet = TheTechPayClass.FindProjectTechPayItemsByDateTime(datTransactionDate);
-
-                MainWindow.gintTransactionID = TheFindProjectTechPayItemByDateTimeDataSet.FindProjectTechPayItemByDateTime[0].TransactionID;
-
-                blnFatalError = TheTechPayClass.UpdateProjectTechPayPoleStick(MainWindow.gintTransactionID, gblnPoleStick);
-
-                if (blnFatalError == true)
-                    throw new Exception();
+                    throw new Exception();                
 
                 gblnHoursComputed = true;
                 txtEnterTechPayItem.Text = "";
                 cboSelectTechPayItem.Items.Clear();
                 txtQuantity.Text = "";
-                txtTechPayPrice.Text = "";
 
             }
             catch (Exception Ex)
@@ -482,7 +472,7 @@ namespace BlueJayDesign
 
         private void TxtContractorTechPayItem_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string strTechPayItem;
+            /*string strTechPayItem;
             int intLength;
             int intCounter;
             int intNumberOfRecords;
@@ -518,7 +508,7 @@ namespace BlueJayDesign
                 TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Enter Tech Pay Item Text " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
-            }
+            } */
         }
 
         private void TxtContractorLastName_TextChanged(object sender, TextChangedEventArgs e)
@@ -657,18 +647,28 @@ namespace BlueJayDesign
         private void CboContractorTechPayItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int intSelectedIndex;
-            decimal decTechPayCost = 0;
+            int intRecordsReturned;
 
             try
             {
-                intSelectedIndex = cboContractorTechPayItem.SelectedIndex - 1;
+                intSelectedIndex = cboSelectTechPayItem.SelectedIndex - 1;
 
                 if (intSelectedIndex > -1)
                 {
-                    gintTechPayID = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayID;
-                    decTechPayCost = TheFindTechPayItemByDescriptionDataSet.FindTechPayItemByDescription[intSelectedIndex].TechPayPrice;
+                    gintProductivityID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
 
-                    txtContractorTechPayPrice.Text = Convert.ToString(decTechPayCost);
+                    TheFindProductivityToTechPayByProductivityIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByProductivityID(gintProductivityID);
+
+                    intRecordsReturned = TheFindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID.Rows.Count;
+
+                    if (intRecordsReturned < 1)
+                    {
+                        gblnProductivityOnly = true;
+                    }
+                    else
+                    {
+                        gintTechPayID = TheFindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID[0].TechPayID;
+                    }
                 }
 
             }
@@ -698,6 +698,21 @@ namespace BlueJayDesign
         private void RdoContractorYes_Checked(object sender, RoutedEventArgs e)
         {
             gblnPoleStick = true;
+        }
+
+        private void TxtDate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursComputed = false;
+        }
+
+        private void TxtStartTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursComputed = false;
+        }
+
+        private void TxtEndTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursComputed = false;
         }
     }
 }

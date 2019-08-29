@@ -69,8 +69,14 @@
     <Reference Include="DesignProjectUpdateDLL">
       <HintPath>..\..\Blue Jay Class Library\DesignProjectUpdateDLL.dll</HintPath>
     </Reference>
+    <Reference Include="EmployeeCrewAssignmentDLL">
+      <HintPath>..\..\Blue Jay Class Library\EmployeeCrewAssignmentDLL.dll</HintPath>
+    </Reference>
     <Reference Include="EmployeeDateEntryDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeDateEntryDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="EmployeeProjectAssignmentDLL">
+      <HintPath>..\..\Blue Jay Class Library\EmployeeProjectAssignmentDLL.dll</HintPath>
     </Reference>
     <Reference Include="JobTypeDLL">
       <HintPath>..\..\Blue Jay Class Library\JobTypeDLL.dll</HintPath>
@@ -89,6 +95,9 @@
     </Reference>
     <Reference Include="ProjectsDLL">
       <HintPath>..\..\Blue Jay Class Library\ProjectsDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectTaskDLL">
+      <HintPath>..\..\Blue Jay Class Library\ProjectTaskDLL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -146,6 +155,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ComputedProductivityDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ConstructionProductivity.xaml.cs">
+      <DependentUpon>ConstructionProductivity.xaml</DependentUpon>
     </Compile>
     <Compile Include="DesignDocumentsDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -267,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CloseProject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConstructionProductivity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

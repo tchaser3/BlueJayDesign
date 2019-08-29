@@ -25,6 +25,7 @@ using DataValidationDLL;
 using NewEmployeeDLL;
 using JobTypeDLL;
 using DesignProjectDocumentation;
+using WOVInvoicingDLL;
 
 namespace BlueJayDesign
 {
@@ -43,15 +44,18 @@ namespace BlueJayDesign
         EmployeeClass TheEmployeeClass = new EmployeeClass();
         JobTypeClass TheJobTypeClass = new JobTypeClass();
         DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
+        WOVInvoicingClass TheWOVInvoicingClass = new WOVInvoicingClass();
 
         FindProjectByAssignedProjectIDDataSet TheFindProjectByAssignedProjectIDDataSet = new FindProjectByAssignedProjectIDDataSet();
         FindDesignProjectsByAssignedProjectIDDataSet TheFindDesignProjectByAssignedProjectIDDataSet = new FindDesignProjectsByAssignedProjectIDDataSet();
         FindSortedJobTypeDataSet TheFindSortedJobTypeDataSet = new FindSortedJobTypeDataSet();
         DesignDocumentsDataSet TheDesignDocumentsDataSet = new DesignDocumentsDataSet();
+        FindSortedWOVBillingCodesDataSet TheFindSortedWOVBillingCodesDataSet = new FindSortedWOVBillingCodesDataSet();
 
         //setting global variables
         string gstrDocumentType;
-        
+        int gintBillingID;
+              
         public AddNewProject()
         {
             InitializeComponent();
@@ -223,6 +227,20 @@ namespace BlueJayDesign
             btnAttachDocuments.IsEnabled = false;
             TheDesignDocumentsDataSet.designdocuments.Rows.Clear();
             dgrResults.ItemsSource = TheDesignDocumentsDataSet.designdocuments;
+
+            cboSelectBillingCode.Items.Clear();
+            cboSelectBillingCode.Items.Add("Select Billing Codes");
+
+            TheFindSortedWOVBillingCodesDataSet = TheWOVInvoicingClass.FindSortedWOVBillingCodes();
+
+            intNumberOfRecords = TheFindSortedWOVBillingCodesDataSet.FindSortedWOVBillingCodes.Rows.Count - 1;
+
+            for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+            {
+                cboSelectBillingCode.Items.Add(TheFindSortedWOVBillingCodesDataSet.FindSortedWOVBillingCodes[intCounter].BillingDescription);
+            }
+
+            cboSelectBillingCode.SelectedIndex = 0;
         }
 
         private void BtnSubmit_Click(object sender, RoutedEventArgs e)
@@ -344,6 +362,11 @@ namespace BlueJayDesign
                     throw new Exception();
 
                 blnFatalError = TheDesignProjectUpdateClass.InsertIntoDesigProjectUpdates(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, "NEW PROJECT ENTERED");
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = TheDesignProjectsClass.UpdateDesignProjectBillingID(MainWindow.gintProjectID, gintBillingID);
 
                 if (blnFatalError == true)
                     throw new Exception();
@@ -490,6 +513,18 @@ namespace BlueJayDesign
         {
             MainWindow.ViewProjectInfoWindow.Visibility = Visibility.Visible;
             this.Visibility = Visibility.Hidden;
+        }
+
+        private void CboSelectBillingCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int intSelectedIndex;
+
+            intSelectedIndex = cboSelectBillingCode.SelectedIndex - 1;
+
+            if(intSelectedIndex > -1)
+            {
+                gintBillingID = TheFindSortedWOVBillingCodesDataSet.FindSortedWOVBillingCodes[intSelectedIndex].BillingID;
+            }
         }
     }
 }

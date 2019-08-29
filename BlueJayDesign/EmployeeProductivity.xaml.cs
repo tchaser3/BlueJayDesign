@@ -23,6 +23,10 @@ using DesignProductivityDLL;
 using DataValidationDLL;
 using WorkTaskDLL;
 using DateSearchDLL;
+using TechPayDLL;
+using WOVInvoicingDLL;
+using DesignProjectDocumentation;
+using ProductivityToTechPayDLL;
 
 namespace BlueJayDesign
 {
@@ -39,15 +43,28 @@ namespace BlueJayDesign
         DataValidationClass TheDataValidationClass = new DataValidationClass();
         WorkTaskClass TheWorkTaskClass = new WorkTaskClass();
         DateSearchClass TheDateSearchClass = new DateSearchClass();
+        TechPayClass TheTechPayClass = new TechPayClass();
+        WOVInvoicingClass TheWOVInvoicingClass = new WOVInvoicingClass();
+        DesignProjectDocumentationClass TheDesignProjectDocumentationClass = new DesignProjectDocumentationClass();
+        ProductivityToTechPayClass TheProductivityToTechPayClass = new ProductivityToTechPayClass();
 
         //setting up the data
+
         FindDesignProjectsByAssignedProjectIDDataSet TheFindDesignProjectsByAssignedProjectIDDataSet = new FindDesignProjectsByAssignedProjectIDDataSet();
-        FindWorkTaskByTaskKeywordDataSet TheFindWorkTaskByTaskKeywordDataSet = new FindWorkTaskByTaskKeywordDataSet();
         FindDesignTotalEmployeeProductivityHoursDataSet TheFindEmployeeTotalProductivityHoursDataSet = new FindDesignTotalEmployeeProductivityHoursDataSet();
+        FindProductivityToTechPayByProductivityIDDataSet ThefindProductivityToTechPayByProductivityIDDataSet = new FindProductivityToTechPayByProductivityIDDataSet();
+        FindProjectTechPayItemByDAteTimeDataSet TheFindProjectTechPayItemByDateTimeDataSet = new FindProjectTechPayItemByDAteTimeDataSet();
+        FindWorkTaskByTaskKeywordDataSet TheFindWorkTaskByTaskKeywordDataSet = new FindWorkTaskByTaskKeywordDataSet();
+        TechPayItemDataSet TheTechPayItemDataSet = new TechPayItemDataSet();
 
         //setting up the global variables
         string gstrProjectID;
-        bool gblnHoursEntered;
+        bool gblnTechPayAttached;
+        bool gblnHoursComputed;
+        decimal gdecTechPayPrice;
+        int gintProductivityID;
+        int gintTechPayID;
+        bool gblnProductivityOnly;
         
         public EmployeeProductivity()
         {
@@ -171,29 +188,29 @@ namespace BlueJayDesign
             txtProductivityItem.Text = "";
             txtProjectID.Text = "";
             txtStartTime.Text = "";
-            gblnHoursEntered = false;
+            gblnHoursComputed = false;
+            gblnProductivityOnly = false;
         }
         private void BtnProcess_Click(object sender, RoutedEventArgs e)
         {
-            //setting local variable
+            //setting local variables
             string strValueForValidation;
-            bool blnFatalError = false;
-            bool blnThereIsAProblem = false;
             string strErrorMessage = "";
-            decimal decTotalHours;
+            bool blnThereIsAProblem = false;
+            bool blnFatalError = false;
+            DateTime datTransactionDate = DateTime.Now;
+            int intQuantity = 0;
             string strStartTime;
             string strEndTime;
-            DateTime datTransactionDate = DateTime.Now;
-            int intRecordsReturned;
-            DateTime datTomorrow;
-            decimal decTotalHoursRecorded;
+            decimal decTotalHours;
+            decimal decTotalTechPayPrice;
 
             try
             {
-                //beginning data validation
                 strValueForValidation = txtEnterDate.Text;
                 blnThereIsAProblem = TheDataValidationClass.VerifyDateData(strValueForValidation);
-                if(blnThereIsAProblem == true)
+                gdecTechPayPrice = 0;
+                if (blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
                     strErrorMessage += "The Date Entered is not a Date\n";
@@ -204,90 +221,84 @@ namespace BlueJayDesign
                 }
                 strStartTime = txtStartTime.Text;
                 blnThereIsAProblem = TheDataValidationClass.VerifyTime(strStartTime);
-                if(blnThereIsAProblem == true)
+                if (blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
                     strErrorMessage += "The Start Time is not a Time\n";
                 }
                 strEndTime = txtEndTime.Text;
-                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strEndTime);
-                if(blnThereIsAProblem == true)
+                blnThereIsAProblem = TheDataValidationClass.VerifyTime(strStartTime);
+                if (blnThereIsAProblem == true)
                 {
                     blnFatalError = true;
                     strErrorMessage += "The End Time is not a Time\n";
                 }
-                gstrProjectID = txtProjectID.Text;
-                if(gstrProjectID == "")
+                if (cboSelectProductivityItem.SelectedIndex < 1)
                 {
                     blnFatalError = true;
-                    strErrorMessage += "The Project ID was not Entered\n";
+                    strErrorMessage += "The Techpay Item was not Selected\n";
+                }
+                strValueForValidation = txtQuantity.Text;
+                blnThereIsAProblem = TheDataValidationClass.VerifyIntegerData(strValueForValidation);
+                if (blnThereIsAProblem == true)
+                {
+                    blnFatalError = true;
+                    strErrorMessage += "The Quantity Entered is not an Integer\n";
                 }
                 else
                 {
-                    TheFindDesignProjectsByAssignedProjectIDDataSet = TheDesignProjectsClass.FindDesignProjectsByAssignedProjectID(gstrProjectID);
-
-                    intRecordsReturned = TheFindDesignProjectsByAssignedProjectIDDataSet.FindDesignProjectsByAssignedProjectID.Rows.Count;
-
-                    if(intRecordsReturned < 1)
-                    {
-                        blnFatalError = true;
-                        strErrorMessage += "The Project ID Was Not Found\n";
-                    }
+                    intQuantity = Convert.ToInt32(strValueForValidation);
                 }
-                if(cboSelectProductivityItem.SelectedIndex < 1)
-                {
-                    blnFatalError = true;
-                    strErrorMessage += "The Productivity Item was not Selected\n";
-                }
-                if(blnFatalError == true)
+                if (blnFatalError == true)
                 {
                     TheMessagesClass.ErrorMessage(strErrorMessage);
                     return;
                 }
 
-                if(gblnHoursEntered == true)
+                decTotalHours = CalculateTimeSpan(strStartTime, strEndTime);
+
+                if (gblnHoursComputed == true)
                 {
                     decTotalHours = 0;
                 }
-                else
-                {
-                    decTotalHours = ComputeTotalHours(strStartTime, strEndTime);
-                }
 
-                if(decTotalHours < 0)
+                if (decTotalHours < 0)
                 {
                     TheMessagesClass.ErrorMessage("You Cannot Have Negative Hours");
                     return;
                 }
 
-                datTransactionDate = TheDateSearchClass.RemoveTime(datTransactionDate);
-                datTomorrow = datTransactionDate;
+                decTotalTechPayPrice = gdecTechPayPrice * intQuantity;
 
-                TheFindEmployeeTotalProductivityHoursDataSet = TheDesignProductivityClass.FindDesignTotalEmployeeProductivityHours(MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, datTomorrow);
-
-                intRecordsReturned = TheFindEmployeeTotalProductivityHoursDataSet.FindDesignTotalEmployeeProductivityHours.Rows.Count;
-
-                if(intRecordsReturned > 0)
+                if(gblnProductivityOnly == false)
                 {
-                    decTotalHoursRecorded = TheFindEmployeeTotalProductivityHoursDataSet.FindDesignTotalEmployeeProductivityHours[0].TotalHours + decTotalHours;
+                    blnFatalError = TheTechPayClass.InsertProjectTechpayItem(MainWindow.gintProjectID, false, "DESIGN", MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWarehouseID, gintTechPayID, gdecTechPayPrice, intQuantity, decTotalTechPayPrice, datTransactionDate);
 
-                    if(decTotalHoursRecorded > 16)
-                    {
-                        TheMessagesClass.ErrorMessage("Your Cannot Work Over 16 Hours");
-                        return;
-                    }
-                }
+                    if (blnFatalError == true)
+                        throw new Exception();
 
-                blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, MainWindow.gintWorkTaskID, decTotalHours, datTransactionDate);
+                    TheFindProjectTechPayItemByDateTimeDataSet = TheTechPayClass.FindProjectTechPayItemsByDateTime(datTransactionDate);
+
+                    MainWindow.gintTransactionID = TheFindProjectTechPayItemByDateTimeDataSet.FindProjectTechPayItemByDateTime[0].TransactionID;
+
+                    blnFatalError = TheTechPayClass.UpdateProjectTechPayPoleStick(MainWindow.gintTransactionID, false);
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }          
+
+                blnFatalError = TheDesignProductivityClass.InsertDesignProductivity(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, gintProductivityID, decTotalHours, datTransactionDate);
 
                 if (blnFatalError == true)
                     throw new Exception();
 
-                TheMessagesClass.InformationMessage("The Productivity Has Been Entered");
+               
 
+                gblnHoursComputed = true;
                 txtProductivityItem.Text = "";
                 cboSelectProductivityItem.Items.Clear();
-                gblnHoursEntered = true;
+                txtQuantity.Text = "";
+
             }
             catch (Exception Ex)
             {
@@ -295,6 +306,40 @@ namespace BlueJayDesign
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private decimal CalculateTimeSpan(string strStartTime, string strEndTime)
+        {
+            decimal decTotalHours = 0;
+            TimeSpan tspStartTime;
+            TimeSpan tspEndTime;
+            TimeSpan tspTotalTime;
+            decimal decHours;
+            decimal decMinutes;
+            int intMinutes;
+
+            try
+            {
+                tspStartTime = TimeSpan.Parse(strStartTime);
+
+                tspEndTime = TimeSpan.Parse(strEndTime);
+
+                tspTotalTime = tspEndTime - tspStartTime;
+
+                decHours = Convert.ToDecimal(tspTotalTime.Hours);
+                intMinutes = tspTotalTime.Minutes;
+                decMinutes = Convert.ToDecimal(intMinutes) / 60;
+
+                decTotalHours = decHours + decMinutes;
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Calculate Time Span " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+            return decTotalHours;
         }
         private decimal ComputeTotalHours(string strStartTime, string strEndTime)
         {
@@ -370,9 +415,9 @@ namespace BlueJayDesign
 
                     intNumberOfRecords = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword.Rows.Count - 1;
 
-                    if(intNumberOfRecords< 0)
+                    if(intNumberOfRecords < 0)
                     {
-                        TheMessagesClass.ErrorMessage("The Productivity Item Was Not Found");
+                        TheMessagesClass.ErrorMessage("The Task Entered is not Correct");
                         return;
                     }
 
@@ -395,23 +440,122 @@ namespace BlueJayDesign
         private void CboSelectProductivityItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int intSelectedIndex;
+            int intRecordsReturned;
 
-            intSelectedIndex = cboSelectProductivityItem.SelectedIndex - 1;
-
-            if(intSelectedIndex > -1)
+            try
             {
-                MainWindow.gintWorkTaskID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
+                intSelectedIndex = cboSelectProductivityItem.SelectedIndex - 1;
+
+                if(intSelectedIndex > -1)
+                {
+                    gintProductivityID = TheFindWorkTaskByTaskKeywordDataSet.FindWorkTaskByTaskKeyword[intSelectedIndex].WorkTaskID;
+
+                    ThefindProductivityToTechPayByProductivityIDDataSet = TheProductivityToTechPayClass.FindProductivityToTechPayByProductivityID(gintProductivityID);
+
+                    intRecordsReturned = ThefindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID.Rows.Count;
+
+                    if(intRecordsReturned < 1)
+                    {
+                        gblnProductivityOnly = true;
+                    }
+                    else
+                    {
+                        gintTechPayID = ThefindProductivityToTechPayByProductivityIDDataSet.FindProductivityToTechPayByProductivityID[0].TechPayID;
+                    }
+                }
             }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // cboSelectTechPayItem Change Event " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        private void GetQuantity()
+        {
+            //setting up variables
+            decimal decTotalHours;
+            string strStartTime;
+            string strEndTime;
+
+            strStartTime = txtStartTime.Text;
+            strEndTime = txtEndTime.Text;
+
+            decTotalHours = CalculateTimeSpan(strStartTime, strEndTime);
+
+            decTotalHours = Math.Round(decTotalHours, 0, MidpointRounding.AwayFromZero);
+
+            txtQuantity.Text = Convert.ToString(decTotalHours);
         }
 
         private void TxtProjectID_TextChanged(object sender, TextChangedEventArgs e)
         {
-            gblnHoursEntered = false;
+            gblnHoursComputed = false;
         }
 
         private void TxtEnterDate_TextChanged(object sender, TextChangedEventArgs e)
         {
-            gblnHoursEntered = false;
+            gblnHoursComputed = false;
+        }
+
+        private void BtnAttachDocument_Click(object sender, RoutedEventArgs e)
+        {
+            //setting local variables
+            string strDocumentPath;
+            string strDocumentType = "TECHPAY SHEET";
+            bool blnFatalError = false;
+            DateTime datTransactionDate = DateTime.Now;
+
+            try
+            {
+                gblnTechPayAttached = true;
+
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.FileName = "Document"; // Default file name
+
+                // Show open file dialog box
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process open file dialog box results
+                if (result == true)
+                {
+                    // Open document
+                    strDocumentPath = dlg.FileName.ToUpper();
+                }
+                else
+                {
+                    return;
+                }
+
+                blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                TheMessagesClass.InformationMessage("The Documents have been Added");
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Employee Productivity // Attach Documents " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+
+        private void BtnConstructionProductivity_Click(object sender, RoutedEventArgs e)
+        {
+            ConstructionProductivity ConstructionProductivity = new ConstructionProductivity();
+            ConstructionProductivity.ShowDialog();
+        }
+
+        private void TxtStartTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursComputed = false;
+        }
+
+        private void TxtEndTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            gblnHoursComputed = false;
         }
     }
 }
