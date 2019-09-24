@@ -275,15 +275,17 @@ namespace BlueJayDesign
         {
             //setting local variables
             string strDocumentPath;
-            string strDocumentType = "TECHPAY SHEET";
+            string strDocumentType = "PERMIT DOCUMENTS";
             bool blnFatalError = false;
             DateTime datTransactionDate = DateTime.Now;
+            int intCounter;
+            int intNumberOfRecords;
 
             try
             {
-                gblnTechPayAttached = true;
 
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.Multiselect = true;
                 dlg.FileName = "Document"; // Default file name
 
                 // Show open file dialog box
@@ -292,24 +294,31 @@ namespace BlueJayDesign
                 // Process open file dialog box results
                 if (result == true)
                 {
-                    // Open document
-                    strDocumentPath = dlg.FileName.ToUpper();
+                    intNumberOfRecords = dlg.FileNames.Length - 1;
+
+                    if (intNumberOfRecords > -1)
+                    {
+                        for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                        {
+                            strDocumentPath = dlg.FileNames[intCounter].ToUpper();
+
+                            blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
+
+                            if (blnFatalError == true)
+                                throw new Exception();
+                        }
+                    }
                 }
                 else
                 {
                     return;
                 }
 
-                blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
-
-                if (blnFatalError == true)
-                    throw new Exception();
-
                 TheMessagesClass.InformationMessage("The Documents have been Added");
             }
             catch (Exception Ex)
             {
-                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design // Enter Design WOV Tech Pay // Attach Documents " + Ex.Message);
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design// Enter Design WOV Techpay // Attach Documents " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }

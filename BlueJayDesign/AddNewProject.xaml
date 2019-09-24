@@ -112,9 +112,7 @@
                 <ComboBox x:Name="cboSelectBillingCode" TabIndex="5"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="35" IsReadOnly="True" FontSize="16" Width="275" SelectionChanged="CboSelectBillingCode_SelectionChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Width="400">
-                <Label x:Name="lblDocumentType" Content="Document Type:"  HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="45"/>
-                <ComboBox x:Name="cboDocumentTypes" TabIndex="13" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" Height="45" Width="110" Margin="5,1,1,1" SelectionChanged="CboDocumentTypes_SelectionChanged"/>
-                <Button x:Name="btnAttachDocuments" TabIndex="14" Content="Attach Documents" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" Margin="5,1,1,1" Click="BtnAttachDocuments_Click"/>
+                <Button x:Name="btnAttachDocuments" TabIndex="14" Content="Attach Documents" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" Margin="125,1,1,1" Click="BtnAttachDocuments_Click"/>
             </StackPanel>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Height="431" Width="400" Margin="576,192,0,146" >

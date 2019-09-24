@@ -313,15 +313,17 @@ namespace BlueJayDesign
         {
             //setting local variables
             string strDocumentPath;
-            string strDocumentType = "SURVEYOR DOCUMENTS";
-            //string strNewLocation = "";
+            string strDocumentType = "PERMIT DOCUMENTS";
             bool blnFatalError = false;
             DateTime datTransactionDate = DateTime.Now;
+            int intCounter;
+            int intNumberOfRecords;
 
             try
             {
-               
+
                 Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.Multiselect = true;
                 dlg.FileName = "Document"; // Default file name
 
                 // Show open file dialog box
@@ -330,23 +332,25 @@ namespace BlueJayDesign
                 // Process open file dialog box results
                 if (result == true)
                 {
-                    // Open document
-                    strDocumentPath = dlg.FileName.ToUpper();
+                    intNumberOfRecords = dlg.FileNames.Length - 1;
+
+                    if (intNumberOfRecords > -1)
+                    {
+                        for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                        {
+                            strDocumentPath = dlg.FileNames[intCounter].ToUpper();
+
+                            blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
+
+                            if (blnFatalError == true)
+                                throw new Exception();
+                        }
+                    }
                 }
                 else
                 {
                     return;
                 }
-
-                //strNewLocation = "\\\\bjc\\shares\\Documents\\";
-                //strDocumentPath = strDocumentPath.Replace("\\", "\\\\");
-                //strNewLocation += strDocumentPath.Substring(3);
-                //TheMessagesClass.ErrorMessage(strNewLocation);
-
-                blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
-
-                if (blnFatalError == true)
-                    throw new Exception();
 
                 TheMessagesClass.InformationMessage("The Documents have been Added");
             }

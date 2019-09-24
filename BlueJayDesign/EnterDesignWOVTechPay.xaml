@@ -128,7 +128,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">
                 <Button x:Name="btnAttachTechPaySheet" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="55" Width="150" TabIndex="6" FontSize="18" Margin="155,2,1,1" Click="BtnAttachTechPaySheet_Click">
-                    <TextBlock TextWrapping="Wrap" Text="Attach Techpay Sheet" TextAlignment="Center"/>
+                    <TextBlock TextWrapping="Wrap" Text="Attach  Documents" TextAlignment="Center"/>
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="416">

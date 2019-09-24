@@ -217,13 +217,6 @@ namespace BlueJayDesign
             txtDateReceived.Background = Brushes.LightGray;
             txtProjectNotes.Text = "CREATED NEW PROJECT";
 
-            cboDocumentTypes.Items.Clear();
-            cboDocumentTypes.Items.Add("Select Document Type");
-            cboDocumentTypes.Items.Add("EXCEL");
-            cboDocumentTypes.Items.Add("PDF");
-            cboDocumentTypes.Items.Add("PICTURE");
-            cboDocumentTypes.SelectedIndex = 0;
-
             btnAttachDocuments.IsEnabled = false;
             TheDesignDocumentsDataSet.designdocuments.Rows.Clear();
             dgrResults.ItemsSource = TheDesignDocumentsDataSet.designdocuments;
@@ -412,102 +405,58 @@ namespace BlueJayDesign
 
         private void BtnAttachDocuments_Click(object sender, RoutedEventArgs e)
         {
-            //string strNewLocation = "";
+            //setting local variables
             string strDocumentPath;
-            string strDocumentType;
+            string strDocumentType = "PERMIT DOCUMENTS";
+            string strNewLocation = "";
             bool blnFatalError = false;
             DateTime datTransactionDate = DateTime.Now;
             int intCounter;
             int intNumberOfRecords;
-            
+
             try
             {
-                intNumberOfRecords = TheDesignDocumentsDataSet.designdocuments.Rows.Count - 1;
 
-                if(intNumberOfRecords < 0)
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                dlg.Multiselect = true;
+                dlg.FileName = "Document"; // Default file name
+
+                // Show open file dialog box
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process open file dialog box results
+                if (result == true)
                 {
-                    TheMessagesClass.ErrorMessage("There are no Documents to Attach");
+                    intNumberOfRecords = dlg.FileNames.Length - 1;
+
+                    if (intNumberOfRecords > -1)
+                    {
+                        for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                        {
+                            strDocumentPath = dlg.FileNames[intCounter].ToUpper();
+
+                            blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
+
+                            if (blnFatalError == true)
+                                throw new Exception();
+                        }
+                    }
+                }
+                else
+                {
                     return;
                 }
 
-                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
-                {
-                    //strNewLocation = "\\\\bjc\\shares\\Documents\\";
-                    strDocumentPath = TheDesignDocumentsDataSet.designdocuments[intCounter].DocumentPath;
-                    strDocumentType = "PROJECT DOCUMENTS";
-                    //strDocumentPath = strDocumentPath.Replace("\\", "\\\\");
-                    //strNewLocation += strDocumentPath.Substring(3);
-                    //TheMessagesClass.ErrorMessage(strNewLocation);
-
-                    blnFatalError = TheDesignProjectDocumentationClass.InsertDesignProjectDocumentation(MainWindow.gintProjectID, MainWindow.TheVerifyDesignEmployeeLogonDataSet.VerifyDesigEmployeeLogon[0].EmployeeID, datTransactionDate, strDocumentType, strDocumentPath);
-
-                    if (blnFatalError == true)
-                        throw new Exception();
-
-                }
-
                 TheMessagesClass.InformationMessage("The Documents have been Added");
-
                 ResetControls();
             }
             catch (Exception Ex)
             {
-                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay ERP // Invoice Vehicle Problems // Process Invoice Menu Item " + Ex.Message);
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design// Add New Project // Attach Documents Button " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
-        }
-
-        private void CboDocumentTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //setting local variables
-            string strDocumentPath;
-
-
-            try
-            {
-                if (cboDocumentTypes.SelectedIndex > 0)
-                {
-
-                    if (cboDocumentTypes.SelectedIndex > 0)
-                        gstrDocumentType = cboDocumentTypes.SelectedItem.ToString();
-
-                    Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-                    dlg.FileName = "Document"; // Default file name
-
-                    // Show open file dialog box
-                    Nullable<bool> result = dlg.ShowDialog();
-
-                    // Process open file dialog box results
-                    if (result == true)
-                    {
-                        // Open document
-                        strDocumentPath = dlg.FileName.ToUpper();
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                    DesignDocumentsDataSet.designdocumentsRow NewDocumentRow = TheDesignDocumentsDataSet.designdocuments.NewdesigndocumentsRow();
-
-                    NewDocumentRow.DocumentPath = strDocumentPath;
-                    NewDocumentRow.DocumentType = gstrDocumentType;
-
-                    TheDesignDocumentsDataSet.designdocuments.Rows.Add(NewDocumentRow);
-
-                    dgrResults.ItemsSource = TheDesignDocumentsDataSet.designdocuments;
-                }
-
-               
-            }
-            catch (Exception Ex)
-            {
-                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay Design// Add New Project // CBO Document Types Selection Changed " + Ex.Message);
-
-                TheMessagesClass.ErrorMessage(Ex.ToString());
-            }
-        }
+        }        
 
         private void BtnViewProjectInfo_Click(object sender, RoutedEventArgs e)
         {
